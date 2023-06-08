@@ -59,7 +59,7 @@ function AdminTemplate() {
                                     {
                                         key: "3.1",
                                         label: (
-                                            <Link to="/couresRegister-management">
+                                            <Link to="/courseRegister-management">
                                                 Danh Sách Ghi Danh
                                             </Link>
                                         ),
