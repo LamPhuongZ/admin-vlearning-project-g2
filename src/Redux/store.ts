@@ -2,22 +2,23 @@ import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import userReducer from "./Slice/userReducer";
 const persistConfig = {
-    key: "root",
-    storage: storage,
-    whitelist: ["userReducer"],
+  key: "root",
+  storage: storage,
+  whitelist: ["userReducer"],
 };
 
 const pReducer = persistReducer(
-    persistConfig,
-    combineReducers({
-
-    })
+  persistConfig,
+  combineReducers({
+    userReducer,
+  })
 );
 //1: ban đầu sẽ import "courseCategoriesSlice" đúng như bên slice của nó, nhưng vì export default nên mình đổi được tên và vì export chấm .reducer nên mình đặt là "courseCategoriesReducer" cho dễ hiểu
 
 const store = configureStore({
-    reducer: pReducer,
+  reducer: pReducer,
 });
 
 //2: sau đó phải khai báo type của dispatch y mẫu: thì khi useDispatch ở component cần dùng sẽ ko bị lỗi typescript

@@ -1,0 +1,52 @@
+.container {
+  background-image: url("../../../public/img/bg2.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  position: relative;
+
+  .content {
+    width: 400px;
+    background-color: white;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 20px;
+    border-radius: 5px;
+
+    .icon {
+      text-align: center;
+
+      i {
+        border: 1px solid transparent;
+        padding: 8px;
+        border-radius: 50%;
+        background-color: #f6ba35;
+        font-size: 24px;
+        color: white;
+      }
+    }
+    h3 {
+      color: #f6ba35;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .formStyle {
+      margin: 15px 0;
+
+      input {
+        width: 100%;
+        padding: 10px;
+      }
+      p {
+        color: red;
+      }
+    }
+    .buttonStyle {
+      text-align: center;
+    }
+  }
+}
