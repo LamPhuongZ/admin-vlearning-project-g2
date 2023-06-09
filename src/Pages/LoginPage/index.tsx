@@ -9,7 +9,7 @@ import { loginAction } from "../../Redux/Slice/userReducer";
 import useCustomDispatch from "../../Hooks/useCustomDispatch";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import useCustomSelector from "../../Hooks/useCustomSelector";
 
 type Props = {};
@@ -48,8 +48,11 @@ function LoginPage({ }: Props) {
         dispatch(loginAction(values))
     }
 
+    const [searchParams] = useSearchParams()
+
     if (user) {
-        return <Navigate to="/" />
+        const url = searchParams.get("redirectUrl") || "/"
+        return <Navigate to={url} />
     }
 
     return <div className={styles.container}>

@@ -1,13 +1,18 @@
-import React from 'react'
+import React, { ReactNode } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import useCustomSelector from "../Hooks/useCustomSelector";
 
 type Props = {
-    children: string
-}
+    children: React.ReactElement;
+};
 
 function AdminProtected({ children }: Props) {
-    return (
-        <div>AdminProtected</div>
-    )
+    const { user } = useCustomSelector("userReducer");
+    const { pathname } = useLocation();
+
+    if (!user)
+        return <Navigate to={`/login?redirectUrl=${pathname}`} replace />
+    return children;
 }
 
-export default AdminProtected
+export default AdminProtected;

@@ -9,6 +9,7 @@ import {
     MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
+import AdminProtected from "../../Route/AdminProtected";
 const { Header, Sider, Content } = Layout;
 
 
@@ -98,9 +99,9 @@ function AdminTemplate() {
                             background: colorBgContainer,
                         }}
                     >
-                        {/* <AdminProtected>
+                        <AdminProtected>
                             <Outlet />
-                        </AdminProtected> */}
+                        </AdminProtected>
                     </Content>
                 </Layout>
             </Layout>
