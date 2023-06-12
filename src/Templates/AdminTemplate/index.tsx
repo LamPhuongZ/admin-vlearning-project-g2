@@ -9,7 +9,7 @@ import {
     MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
-import AdminProtected from "../../Route/AdminProtected";
+import AdminProtected from "../../route/AdminProtected";
 const { Header, Sider, Content } = Layout;
 
 
