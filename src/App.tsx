@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminTemplate from "./Templates/AdminTemplate";
-import UserManagement from "./pages/UserManagement";
-import CreateUserManagement from "./pages/UserManagement/CreateUserManagement";
-import EditUserManagement from "./pages/UserManagement/EditUserManagement";
-import LoginPage from "./pages/LoginPage";
-import CourseManagement from "./pages/CourseManagement";
-import CreateCourseManagement from "./pages/CourseManagement/CreateCourseManagement";
-import EditCourseManagement from "./pages/CourseManagement/EditCourseManagement";
+import UserManagement from "./Pages/UserManagement";
+import CreateUserManagement from "./Pages/UserManagement/CreateUserManagement";
+import EditUserManagement from "./Pages/UserManagement/EditUserManagement";
+import CourseManagement from "./Pages/CourseManagement";
+import CreateCourseManagement from "./Pages/CourseManagement/CreateCourseManagement";
+import EditCourseManagement from "./Pages/CourseManagement/EditCourseManagement";
+import LoginPage from "./Pages/LoginPage";
 
 function App() {
   return (
