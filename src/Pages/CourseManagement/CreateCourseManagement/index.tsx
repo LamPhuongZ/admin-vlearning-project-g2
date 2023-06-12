@@ -278,7 +278,6 @@ function CreateCourseManagement({ }: Props) {
                 <Space direction="vertical" size={12}>
                   <DatePicker
                     format="DD/MM/YYYY"
-                  // onChange={onChange}
                   />
                 </Space>
               )
