@@ -1,0 +1,19 @@
+.searchStyle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  input {
+    padding: 6px;
+    border: 1px solid rgb(65, 178, 148);
+    width: 100%;
+    font-size: 16px;
+  }
+  i {
+    font-size: 20px;
+    border: 1px solid rgb(65, 178, 148);
+    padding: 6px;
+    background-color: rgb(65, 178, 148);
+    color: #fff;
+    cursor: pointer;
+  }
+}
