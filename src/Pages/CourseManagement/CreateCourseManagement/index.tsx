@@ -32,7 +32,7 @@ function CreateCourseManagement({ }: Props) {
     tenKhoaHoc: string;
     moTa: string;
     luotXem: number;
-    hinhAnh: string;
+    hinhAnh: any;
     maNhom: string;
     ngayTao: string;
     soLuongHocVien: number;
@@ -62,8 +62,15 @@ function CreateCourseManagement({ }: Props) {
   });
 
   const onSubmit = async (values: CreateCourseType) => {
+
     try {
-      const data = await createCourseAPI(values);
+      const payload = {
+        ...values,
+        hinhAnh: values.hinhAnh.file.originFileObj
+      }
+      console.log(payload);
+
+      const data = await createCourseAPI(payload);
       console.log(data);
 
       navigate("/course-management");
@@ -206,34 +213,28 @@ function CreateCourseManagement({ }: Props) {
             control={control}
             render={({ field }) => {
               return (
-                //   <Upload
-                //     action="/upload.do"
-                //     onChange={onChange}
-                //     // fileList={[]}
-                //     {...field}
-                //     listType="picture-card"
-                //   >
-                //     <div>
-                //       <PlusOutlined />
-                //       <div
-                //         style={{
-                //           marginTop: 8,
-                //         }}
-                //       >
-                //         Upload
-                //       </div>
-                //     </div>
-                //   </Upload>
-                // );
-
-                <Input
-                  type='text'
-                  // onChange={onChange}
+                <Upload
+                  action="/upload.do"
+                  // onChange={field.onChange}
                   {...field}
-                  placeholder="Hình ảnh *"
-                />
-              )
-            }}
+                  // fileList={[]}
+                  {...field}
+                  listType="picture-card"
+                >
+                  <div>
+                    <PlusOutlined />
+                    <div
+                      style={{
+                        marginTop: 8,
+                      }}
+                    >
+                      Upload
+                    </div>
+                  </div>
+                </Upload>
+              );
+            }
+            }
             rules={{
               required: {
                 value: true,
