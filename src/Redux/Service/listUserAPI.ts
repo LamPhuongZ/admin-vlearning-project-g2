@@ -71,3 +71,15 @@ export const createUserRequest = async (payload: UpdateUserInfoPayload) => {
     throw error.response.data;
   }
 };
+
+// Call API lấy danh sách GV
+export const listUserTeacherRequest = async () => {
+  try {
+    const response = await axiosClient(
+      `/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=${"GP01"}&tuKhoa=${'GV'}`
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error?.response?.data;
+  }
+};

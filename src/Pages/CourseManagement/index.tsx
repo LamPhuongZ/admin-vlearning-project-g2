@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Modal, Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import { BookOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -13,6 +13,8 @@ type Props = {}
 
 function CourseManagement({ }: Props) {
     const [dataSource, setDataSource] = useState<CourseType[]>([]);
+    const [search, setSearch] = useState<CourseType[]>([]);
+    const [filterData, setFIlterData] = useState('');
     const navigate = useNavigate();
 
     // Chuyển trang thêm khóa học
@@ -136,6 +138,7 @@ function CourseManagement({ }: Props) {
         try {
             const reponse = await getCourseListAPI();
             setDataSource(reponse);
+            setSearch(reponse);
         } catch (error) {
             toast.error("Không lấy được danh sách khóa học");
         }
@@ -156,6 +159,19 @@ function CourseManagement({ }: Props) {
         }
     }
 
+    // Hàm tìm kiếm kháo học
+    const handleSearchCourse = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value.length > 0) {
+            const filterResult = search.filter((item) => item.tenKhoaHoc.toLocaleLowerCase().includes(event.target.value.toLowerCase()));
+            setDataSource(filterResult);
+        }
+        else {
+            setDataSource(search);
+        }
+
+        setFIlterData(event.target.value)
+    }
+
     return (
         <div style={{ width: "100%" }}>
             <h2>QUẢN LÝ KHÓA HỌC</h2>
@@ -171,8 +187,8 @@ function CourseManagement({ }: Props) {
 
             <Search
                 placeholder="Search Tên Khóa Học"
-                // onChange={handleChange}
-                // onClick={handleSearch}
+                value={filterData}
+                onChange={(event) => handleSearchCourse(event)}
             />
 
             <Table

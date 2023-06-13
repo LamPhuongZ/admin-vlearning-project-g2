@@ -10,12 +10,14 @@ import styles from './editCourseManagement.module.scss'
 import { PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/es/input/TextArea';
 import Button from '../../../Core/Button';
+import useCustomSelector from '../../../Hooks/useCustomSelector';
 
 type Props = {}
 
 function EditCourseManagement({ }: Props) {
   const [categoriesCourse, setCategoriesCourse] = useState([]);
   const [fileList, setFileList] = useState<any>([]);
+  const { user } = useCustomSelector("userReducer");
   const { courseId } = useParams();
   const navigate = useNavigate();
 
@@ -93,12 +95,11 @@ function EditCourseManagement({ }: Props) {
   }, [courseId]);
 
   const onSubmit = async (values: UpdateCourseType) => {
+    if (!fileList.length) {
+      toast.warning("Vui lòng chọn hình ảnh");
+      return;
+    }
     try {
-      if (!fileList.length) {
-        toast.warning("Vui lòng chọn hình ảnh");
-        return;
-      }
-
       const data = await updateCourseAPI({
         maKhoaHoc: values.maKhoaHoc,
         biDanh: values.biDanh,
@@ -344,6 +345,7 @@ function EditCourseManagement({ }: Props) {
                 <Input
                   type='text'
                   {...field}
+                  value={user?.taiKhoan}
                   placeholder="Tài khoản người tạo *"
                 />
               )
@@ -447,7 +449,7 @@ function EditCourseManagement({ }: Props) {
         </div>
 
         <div className={styles.formGroup}>
-          <Button title='Cập nhật Khóa Học' bgColor='rgb(65, 178, 148)' />
+          <Button title='Cập Nhật Khóa Học' bgColor='rgb(65, 178, 148)' />
         </div>
       </form>
     </div>

@@ -10,11 +10,15 @@ import cls from "classnames";
 import Button from '../../../Core/Button';
 import { PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/es/input/TextArea';
+import useCustomSelector from '../../../Hooks/useCustomSelector';
+import { listUserTeacherRequest } from '../../../Redux/Service/listUserAPI';
 
 type Props = {}
 
 function CreateCourseManagement({ }: Props) {
   const [categoriesCourse, setCategoriesCourse] = useState([]);
+  const [listTeacher, setListTeacher] = useState([]);
+  const { user } = useCustomSelector("userReducer");
   const navigate = useNavigate();
 
   type CreateCourseType = {
@@ -34,7 +38,11 @@ function CreateCourseManagement({ }: Props) {
   type CategoriesCourseType = {
     maDanhMuc: string;
     tenDanhMuc: string;
-  }
+  };
+
+  type ListTeacherType = {
+    taiKhoan: string;
+  };
 
   const { handleSubmit, control, formState: { errors } } = useForm({
     defaultValues: {
@@ -64,7 +72,7 @@ function CreateCourseManagement({ }: Props) {
     } catch (error) {
       toast.error("Thêm khóa học không thành công");
     }
-  }
+  };
 
   // Call lấy danh mục khóa học
   const getCategoriesCourse = async () => {
@@ -88,7 +96,31 @@ function CreateCourseManagement({ }: Props) {
         </Select.Option>
       );
     })
-  }
+  };
+
+  // Call lấy danh sách giảng viên
+  const getlistUserTeacher = async () => {
+    try {
+      const data = await listUserTeacherRequest();
+      setListTeacher(data);
+    } catch (error) {
+      toast.error("Không lấy được danh sách giảng viên");
+    }
+  };
+
+  useEffect(() => {
+    getlistUserTeacher();
+  }, []);
+
+  const renderlistUserTeacher = () => {
+    return listTeacher.map((option: ListTeacherType) => {
+      return (
+        <Select.Option key={option.taiKhoan} value={option.taiKhoan}>
+          {option.taiKhoan}
+        </Select.Option>
+      );
+    })
+  };
 
   return (
     <div>
@@ -287,17 +319,27 @@ function CreateCourseManagement({ }: Props) {
             control={control}
             render={({ field }) => {
               return (
-                <Input
-                  type='text'
-                  {...field}
-                  placeholder="Tài khoản người tạo *"
+                <Input 
+                type='text'
+                {...field}
+                value={user?.taiKhoan}
+                disabled
+                placeholder="Tài khoản người tạo *"
                 />
+                // <Select
+                //   {...field}
+                //   style={{ width: '50rem', textAlign: 'left' }}
+                //   value={undefined}
+                //   placeholder="--Chọn Tài khoản người tạo--"
+                // >
+                //   {renderlistUserTeacher()}
+                // </Select>
               )
             }}
             rules={{
               required: {
                 value: true,
-                message: "Tài khoản người tạo không được để trống",
+                message: "Vui lòng chọn tài khoản",
               },
             }}
           />
