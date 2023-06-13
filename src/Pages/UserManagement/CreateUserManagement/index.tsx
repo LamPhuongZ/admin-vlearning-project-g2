@@ -29,12 +29,12 @@ const schema = yup.object({
     hoTen: yup
         .string()
         .required("Họ tên không được để trống")
-        .matches(/[a-zA-Z]{6,}/, "Họ tên chứa ít nhất 6 kí tự và không chứa số"),
+        .matches(/[a-z\sA-Z]{6,}/, "Họ tên chứa ít nhất 6 kí tự và không chứa số"),
     soDT: yup.string().required("SĐT không được để trống"),
     maLoaiNguoiDung: yup.string().required("Chọn mã người dùng"),
     maNhom: yup.string().required("Chọn mã nhóm"),
     email: yup.string().required("Email không được để trống"),
-});
+})
 
 function CreateUserManagement({ }: Props) {
     const {
@@ -61,13 +61,13 @@ function CreateUserManagement({ }: Props) {
             await createUserRequest(values);
             toast.success("Thêm thành công");
             navigate("/user-management")
-        } catch (error) {
-            toast.error("Thêm thất bại");
+        } catch (error: any) {
+            toast.error(error);
         }
     };
 
     return (
-        <form className={styles.container} onClick={handleSubmit(fetchCreateUser)}>
+        <form className={styles.container} onSubmit={handleSubmit(fetchCreateUser)}>
             <UsergroupAddOutlined className={styles.iconStyle} />
             <h2>Thêm người dùng</h2>
             <div className={styles.formStyle}>

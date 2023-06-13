@@ -66,8 +66,8 @@ function EditUserManagement({ }: Props) {
                 setValue("maNhom", "GP02");
                 setValue("email", item.email);
             }
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            toast.error(error);
         }
     };
     const fetchUpdateUserInfo = async (values: UpdateUserInfoPayload) => {
@@ -83,8 +83,8 @@ function EditUserManagement({ }: Props) {
             });
             toast.success("Cập nhật thông tin thành công");
             navigate("/user-management");
-        } catch (error) {
-            toast.error("Cập nhật thất bại")
+        } catch (error: any) {
+            toast.error(error);
         }
     };
 

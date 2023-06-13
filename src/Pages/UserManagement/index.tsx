@@ -26,7 +26,7 @@ type Props = {};
 
 function UserManagement({ }: Props) {
     const [accounts, setAccounts] = useState<DataType[]>([]);
-    const [searchParams] = useSearchParams()
+    const [searchParams] = useSearchParams();
     const inputSearchRef = useRef("");
     const navigate = useNavigate();
 
@@ -35,15 +35,15 @@ function UserManagement({ }: Props) {
         inputSearchRef.current = value;
     };
     const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault()
-        navigate(`/user-management?query=${inputSearchRef.current}`)
-    }
+        e.preventDefault();
+        navigate(`/user-management?query=${inputSearchRef.current}`);
+    };
     const handleNavigateToEditUser = (userId: string) => {
-        navigate(`/user-management/edit/${userId}`)
-    }
+        navigate(`/user-management/edit/${userId}`);
+    };
     const handleNavigateToCreateUser = () => {
-        navigate("/user-management/create")
-    }
+        navigate("/user-management/create");
+    };
 
     const columns: ColumnsType<DataType> = [
         {
@@ -91,7 +91,8 @@ function UserManagement({ }: Props) {
                         />
                         <EditOutlined
                             className={styles.editButton}
-                            onClick={() => handleNavigateToEditUser(row.taiKhoan)} />
+                            onClick={() => handleNavigateToEditUser(row.taiKhoan)}
+                        />
                     </div>
                 );
             },
@@ -113,8 +114,8 @@ function UserManagement({ }: Props) {
         try {
             const response = await listUserRequest();
             setAccounts(response);
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            toast.error(error);
         }
     };
 
@@ -130,12 +131,10 @@ function UserManagement({ }: Props) {
 
     const fetchSearchUser = async (userName: string) => {
         try {
-            const response = await searchUserRequest(userName)
+            const response = await searchUserRequest(userName);
             setAccounts(response);
-        } catch (error) {
-
-        }
-    }
+        } catch (error) { }
+    };
 
     useEffect(() => {
         fetchListUser();
@@ -143,11 +142,11 @@ function UserManagement({ }: Props) {
 
     useEffect(() => {
         if (searchParams.get(`query`)) {
-            fetchSearchUser(searchParams.get(`query`) as string)
+            fetchSearchUser(searchParams.get(`query`) as string);
         } else {
-            fetchListUser()
+            fetchListUser();
         }
-    }, [searchParams.get(`query`)])
+    }, [searchParams.get(`query`)]);
 
     return (
         <div className={styles.container}>
@@ -161,7 +160,11 @@ function UserManagement({ }: Props) {
                 fontWeight="900"
                 onClick={handleNavigateToCreateUser}
             />
-            <Search placeholder="Search tài khoản" onChange={handleChange} onClick={handleSearch} />
+            <Search
+                placeholder="Search tài khoản"
+                onChange={handleChange}
+                onClick={handleSearch}
+            />
 
             <Table
                 columns={columns}

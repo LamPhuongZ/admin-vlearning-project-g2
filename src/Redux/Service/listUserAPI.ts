@@ -17,8 +17,8 @@ export const listUserRequest = async () => {
       `/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=${"GP02"}`
     );
     return response.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };
 
@@ -41,8 +41,8 @@ export const searchUserRequest = async (userName: string) => {
       `/QuanLyNguoiDung/TimKiemNguoiDung?MaNhom=${"GP02"}&tuKhoa=${userName}`
     );
     return response.data;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    throw error.response.data;
   }
 };
 
@@ -54,8 +54,8 @@ export const updateUserInfoRequest = async (payload: UpdateUserInfoPayload) => {
       payload
     );
     return response;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error.response.data;
   }
 };
 
@@ -67,7 +67,7 @@ export const createUserRequest = async (payload: UpdateUserInfoPayload) => {
       payload
     );
     return response;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error.response.data;
   }
 };
