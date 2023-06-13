@@ -44,7 +44,7 @@ function CreateCourseManagement({ }: Props) {
     taiKhoan: string;
   };
 
-  const { handleSubmit, control, formState: { errors } } = useForm({
+  const { handleSubmit, setValue, control, formState: { errors } } = useForm({
     defaultValues: {
       maKhoaHoc: "",
       biDanh: "",
@@ -87,6 +87,12 @@ function CreateCourseManagement({ }: Props) {
   useEffect(() => {
     getCategoriesCourse();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setValue("taiKhoanNguoiTao", user.taiKhoan)
+    }
+  }, [user])
 
   const renderCategoriesCourse = () => {
     return categoriesCourse.map((option: CategoriesCourseType) => {
@@ -319,12 +325,11 @@ function CreateCourseManagement({ }: Props) {
             control={control}
             render={({ field }) => {
               return (
-                <Input 
-                type='text'
-                {...field}
-                value={user?.taiKhoan}
-                disabled
-                placeholder="Tài khoản người tạo *"
+                <Input
+                  type='text'
+                  {...field}
+                  disabled
+                  placeholder="Tài khoản người tạo *"
                 />
                 // <Select
                 //   {...field}
