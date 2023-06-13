@@ -4,7 +4,7 @@ import axiosClient from "../../Config/axiosClient";
 export const getCourseListAPI = async () => {
   try {
     const response = await axiosClient.get(
-      `/QuanLyKhoaHoc/LayDanhSachKhoaHoc?MaNhom=GP01`
+      `/QuanLyKhoaHoc/LayDanhSachKhoaHoc?MaNhom=GP02`
     );
     return response.data;
   } catch (error) {

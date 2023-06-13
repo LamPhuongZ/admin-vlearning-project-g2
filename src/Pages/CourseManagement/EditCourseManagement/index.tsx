@@ -23,7 +23,6 @@ function EditCourseManagement({ }: Props) {
 
   type UpdateCourseType = {
     maKhoaHoc: string;
-    biDanh: string;
     tenKhoaHoc: string;
     moTa: string;
     luotXem: number;
@@ -43,12 +42,11 @@ function EditCourseManagement({ }: Props) {
   const { handleSubmit, control, setValue, formState: { errors } } = useForm({
     defaultValues: {
       maKhoaHoc: "",
-      biDanh: "",
       tenKhoaHoc: "",
       moTa: "",
       luotXem: 0,
       hinhAnh: "",
-      maNhom: "",
+      maNhom: "GP02",
       ngayTao: "",
       soLuongHocVien: 0,
       taiKhoanNguoiTao: "",
@@ -64,21 +62,11 @@ function EditCourseManagement({ }: Props) {
 
       // update dữ  liệu vào ô Input
       setValue("maKhoaHoc", response.maKhoaHoc);
-      setValue("biDanh", response.biDanh);
       setValue("tenKhoaHoc", response.tenKhoaHoc);
       setValue("moTa", response.moTa);
       setValue("luotXem", response.luotXem);
       setValue("hinhAnh", response.hinhAnh);
-      // setFileList([
-      //   ...fileList,
-      //   {
-      //     uid: "-1",
-      //     name: "image.png",
-      //     status: "done",
-      //     url: response.hinhAnh,
-      //   },
-      // ]);
-      setValue("maNhom", response.maNhom);
+      setValue("maNhom", "GP02");
       setValue("ngayTao", response.ngayTao);
       setValue("soLuongHocVien", response.soLuongHocVien);
       setValue("taiKhoanNguoiTao", response.nguoiTao.taiKhoan);
@@ -102,7 +90,6 @@ function EditCourseManagement({ }: Props) {
     try {
       const data = await updateCourseAPI({
         maKhoaHoc: values.maKhoaHoc,
-        biDanh: values.biDanh,
         tenKhoaHoc: values.tenKhoaHoc,
         moTa: values.moTa,
         luotXem: values.luotXem,
@@ -110,7 +97,7 @@ function EditCourseManagement({ }: Props) {
           fileList.length && fileList[0]?.originFileObj
             ? fileList[0]?.originFileObj
             : fileList[0].url,
-        maNhom: values.maNhom,
+        maNhom: "GP02",
         ngayTao: values.ngayTao,
         soLuongHocVien: values.soLuongHocVien,
         taiKhoanNguoiTao: values.taiKhoanNguoiTao,
@@ -122,6 +109,12 @@ function EditCourseManagement({ }: Props) {
       toast.error("Cập nhật khóa học không thành công");
     }
   }
+
+  useEffect(() => {
+    if (user) {
+      setValue("taiKhoanNguoiTao", user.taiKhoan)
+    }
+  }, [user]);
 
   // Call lấy danh mục khóa học
   const getCategoriesCourse = async () => {
@@ -181,29 +174,6 @@ function EditCourseManagement({ }: Props) {
 
         <div className={styles.formGroup}>
           <Controller
-            name="biDanh"
-            control={control}
-            render={({ field }) => {
-              return (
-                <Input
-                  type='text'
-                  {...field}
-                  placeholder="Bí danh *"
-                />
-              )
-            }}
-            rules={{
-              required: {
-                value: true,
-                message: "Bí danh không được để trống",
-              },
-            }}
-          />
-          {errors.biDanh && <p>{errors.biDanh.message}</p>}
-        </div>
-
-        <div className={styles.formGroup}>
-          <Controller
             name="tenKhoaHoc"
             control={control}
             render={({ field }) => {
@@ -257,21 +227,7 @@ function EditCourseManagement({ }: Props) {
                   placeholder="--Chọn Nhóm--"
 
                   options={[
-                    { value: 'GP01', label: 'GP01' },
                     { value: 'GP02', label: 'GP02' },
-                    { value: 'GP03', label: 'GP03' },
-                    { value: 'GP04', label: 'GP04' },
-                    { value: 'GP05', label: 'GP05' },
-                    { value: 'GP06', label: 'GP06' },
-                    { value: 'GP07', label: 'GP07' },
-                    { value: 'GP08', label: 'GP08' },
-                    { value: 'GP09', label: 'GP09' },
-                    { value: 'GP10', label: 'GP10' },
-                    { value: 'GP11', label: 'GP11' },
-                    { value: 'GP12', label: 'GP12' },
-                    { value: 'GP13', label: 'GP13' },
-                    { value: 'GP14', label: 'GP14' },
-                    { value: 'GP15', label: 'GP15' },
                   ]}
                 />
               )
