@@ -10,13 +10,14 @@ import styles from './editCourseManagement.module.scss'
 import { PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/es/input/TextArea';
 import Button from '../../../Core/Button';
+import useCustomSelector from '../../../Hooks/useCustomSelector';
 
 type Props = {}
 
 function EditCourseManagement({ }: Props) {
   const [categoriesCourse, setCategoriesCourse] = useState([]);
-  console.log(categoriesCourse)
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState<any>([]);
+  const { user } = useCustomSelector("userReducer");
   const { courseId } = useParams();
   const navigate = useNavigate();
 
@@ -86,19 +87,22 @@ function EditCourseManagement({ }: Props) {
   }, [courseId]);
 
   const onSubmit = async (values: UpdateCourseType) => {
-    try {
-      // const payload = {
-      //   ...values,
-      //   hinhAnh: values.hinhAnh?.file?.originFileObj
-      // }
+    if (!fileList.length) {
+      toast.warning("Vui lòng chọn hình ảnh");
+      return;
+    }
 
+    try {
       const data = await updateCourseAPI({
         maKhoaHoc: values.maKhoaHoc,
         biDanh: values.biDanh,
         tenKhoaHoc: values.tenKhoaHoc,
         moTa: values.moTa,
         luotXem: values.luotXem,
-        hinhAnh: values.hinhAnh,
+        hinhAnh:
+          fileList.length && fileList[0]?.originFileObj
+            ? fileList[0]?.originFileObj
+            : fileList[0].url,
         maNhom: values.maNhom,
         ngayTao: values.ngayTao,
         soLuongHocVien: values.soLuongHocVien,
@@ -334,6 +338,7 @@ function EditCourseManagement({ }: Props) {
                 <Input
                   type='text'
                   {...field}
+                  value={user?.taiKhoan}
                   placeholder="Tài khoản người tạo *"
                 />
               )
@@ -434,7 +439,7 @@ function EditCourseManagement({ }: Props) {
         </div>
 
         <div className={styles.formGroup}>
-          <Button title='Thêm Khóa Học' bgColor='rgb(65, 178, 148)' />
+          <Button title='Cập Nhật Khóa Học' bgColor='rgb(65, 178, 148)' />
         </div>
       </form>
     </div>
