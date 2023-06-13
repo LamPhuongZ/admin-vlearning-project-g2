@@ -11,7 +11,6 @@ import Button from '../../../Core/Button';
 import { PlusOutlined } from '@ant-design/icons';
 import TextArea from 'antd/es/input/TextArea';
 import useCustomSelector from '../../../Hooks/useCustomSelector';
-import { listUserTeacherRequest } from '../../../Redux/Service/listUserAPI';
 
 type Props = {}
 
@@ -23,7 +22,6 @@ function CreateCourseManagement({ }: Props) {
 
   type CreateCourseType = {
     maKhoaHoc: string;
-    biDanh: string;
     tenKhoaHoc: string;
     moTa: string;
     luotXem: number;
@@ -40,14 +38,9 @@ function CreateCourseManagement({ }: Props) {
     tenDanhMuc: string;
   };
 
-  type ListTeacherType = {
-    taiKhoan: string;
-  };
-
   const { handleSubmit, setValue, control, formState: { errors } } = useForm({
     defaultValues: {
       maKhoaHoc: "",
-      biDanh: "",
       tenKhoaHoc: "",
       moTa: "",
       luotXem: 0,
@@ -104,30 +97,6 @@ function CreateCourseManagement({ }: Props) {
     })
   };
 
-  // Call lấy danh sách giảng viên
-  const getlistUserTeacher = async () => {
-    try {
-      const data = await listUserTeacherRequest();
-      setListTeacher(data);
-    } catch (error) {
-      toast.error("Không lấy được danh sách giảng viên");
-    }
-  };
-
-  useEffect(() => {
-    getlistUserTeacher();
-  }, []);
-
-  const renderlistUserTeacher = () => {
-    return listTeacher.map((option: ListTeacherType) => {
-      return (
-        <Select.Option key={option.taiKhoan} value={option.taiKhoan}>
-          {option.taiKhoan}
-        </Select.Option>
-      );
-    })
-  };
-
   return (
     <div>
       <div className={styles.textTilte}>
@@ -157,29 +126,6 @@ function CreateCourseManagement({ }: Props) {
             }}
           />
           {errors.maKhoaHoc && <p>{errors.maKhoaHoc.message}</p>}
-        </div>
-
-        <div className={styles.formGroup}>
-          <Controller
-            name="biDanh"
-            control={control}
-            render={({ field }) => {
-              return (
-                <Input
-                  type='text'
-                  {...field}
-                  placeholder="Bí danh *"
-                />
-              )
-            }}
-            rules={{
-              required: {
-                value: true,
-                message: "Bí danh không được để trống",
-              },
-            }}
-          />
-          {errors.biDanh && <p>{errors.biDanh.message}</p>}
         </div>
 
         <div className={styles.formGroup}>
@@ -239,21 +185,7 @@ function CreateCourseManagement({ }: Props) {
                   placeholder="--Chọn Nhóm--"
 
                   options={[
-                    { value: 'GP01', label: 'GP01' },
                     { value: 'GP02', label: 'GP02' },
-                    { value: 'GP03', label: 'GP03' },
-                    { value: 'GP04', label: 'GP04' },
-                    { value: 'GP05', label: 'GP05' },
-                    { value: 'GP06', label: 'GP06' },
-                    { value: 'GP07', label: 'GP07' },
-                    { value: 'GP08', label: 'GP08' },
-                    { value: 'GP09', label: 'GP09' },
-                    { value: 'GP10', label: 'GP10' },
-                    { value: 'GP11', label: 'GP11' },
-                    { value: 'GP12', label: 'GP12' },
-                    { value: 'GP13', label: 'GP13' },
-                    { value: 'GP14', label: 'GP14' },
-                    { value: 'GP15', label: 'GP15' },
                   ]}
                 />
               )
@@ -331,14 +263,6 @@ function CreateCourseManagement({ }: Props) {
                   disabled
                   placeholder="Tài khoản người tạo *"
                 />
-                // <Select
-                //   {...field}
-                //   style={{ width: '50rem', textAlign: 'left' }}
-                //   value={undefined}
-                //   placeholder="--Chọn Tài khoản người tạo--"
-                // >
-                //   {renderlistUserTeacher()}
-                // </Select>
               )
             }}
             rules={{
