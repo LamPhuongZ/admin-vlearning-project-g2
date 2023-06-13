@@ -10,7 +10,6 @@ export const loginRequest = async (payload: LoginPayload) => {
       "/QuanLyNguoiDung/DangNhap",
       payload
     );
-    console.log(response);
     return response.data;
   } catch (error) {
     throw error;

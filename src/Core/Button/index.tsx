@@ -10,6 +10,7 @@ type Props = {
     bgColor?: string;
     borderColor?: string;
     margin?: string;
+    fontWeight?: string
 };
 
 function Button({
@@ -20,6 +21,7 @@ function Button({
     bgColor = "#f6ba35",
     borderColor = "transparent",
     margin,
+    fontWeight,
 }: Props) {
     return (
         <button
@@ -29,6 +31,7 @@ function Button({
                 backgroundColor: bgColor,
                 borderColor: borderColor,
                 margin: margin,
+                fontWeight: fontWeight
             }}
             onClick={onClick}
             disabled={loading}

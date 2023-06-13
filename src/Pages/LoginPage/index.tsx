@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./loginPage.module.scss";
 import { useForm } from "react-hook-form";
-import * as yup from "yup"
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../../Core/Button";
 import { LoginPayload } from "../../Redux/Service/loginAPI";
 import { loginAction } from "../../Redux/Slice/userReducer";
@@ -22,69 +22,86 @@ const schema = yup.object({
     matKhau: yup
         .string()
         .required("Mật khẩu không được trống")
-        .matches(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/, "Mật khẩu phải chứa ít nhất 1 chữ cái và 1 chữ số")
-})
+        .matches(
+            /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
+            "Mật khẩu phải chứa ít nhất 1 chữ cái và 1 chữ số"
+        ),
+});
 
 function LoginPage({ }: Props) {
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             taiKhoan: "",
-            matKhau: ""
+            matKhau: "",
         },
         mode: "onTouched",
-        resolver: yupResolver(schema)
-    })
+        resolver: yupResolver(schema),
+    });
 
     // const { user } = useSelector((state: RootState) => {
     //     return state.userReducer
     // })
+    const { user } = useCustomSelector("userReducer");
+    const dispatch = useCustomDispatch();
 
-    const { user } = useCustomSelector('userReducer')
-
-
-    const dispatch = useCustomDispatch()
+    const [togglePassword, setTogglePassword] = useState(false);
 
     const onSubmit = (values: LoginPayload) => {
-        dispatch(loginAction(values))
-    }
+        dispatch(loginAction(values));
+    };
 
-    const [searchParams] = useSearchParams()
+    const [searchParams] = useSearchParams();
 
     if (user) {
-        const url = searchParams.get("redirectUrl") || "/"
-        return <Navigate to={url} />
+        const url = searchParams.get("redirectUrl") || "/";
+        return <Navigate to={url} />;
     }
 
-    return <div className={styles.container}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className={styles.content}>
-                <div className={styles.icon}>
-                    <i className="fa fa-user-lock"></i>
+    return (
+        <div className={styles.container}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className={styles.content}>
+                    <div className={styles.icon}>
+                        <i className="fa fa-user-lock"></i>
+                    </div>
+                    <h3>Đăng nhập User Admin</h3>
+
+                    <div className={styles.formStyle}>
+                        <input
+                            type="text"
+                            placeholder="Tài khoản *"
+                            {...register("taiKhoan")}
+                        />
+                        {errors.taiKhoan && <p>{errors.taiKhoan.message}</p>}
+                    </div>
+
+                    <div className={styles.formStyle}>
+                        <input
+                            type={togglePassword ? "text" : "password"}
+                            placeholder="Mật khẩu *"
+                            {...register("matKhau")}
+                        />
+                        {errors.matKhau && <p>{errors.matKhau.message}</p>}
+                    </div>
+
+                    <div>
+                        <input type="checkbox"
+                            id="showPassword"
+                            onChange={() => setTogglePassword(!togglePassword)} />
+                        <label htmlFor="showPassword">Hiển thị mật khẩu</label>
+                    </div>
+
+                    <div className={styles.buttonStyle}>
+                        <Button title="Đăng nhập" margin="10px 0 0 0" />
+                    </div>
                 </div>
-                <h3>Đăng nhập User Admin</h3>
-
-                <div className={styles.formStyle}>
-                    <input type="text"
-                        placeholder="Tài khoản *"
-                        {...register("taiKhoan")} />
-                    {errors.taiKhoan && <p>{errors.taiKhoan.message}</p>}
-                </div>
-
-
-                <div className={styles.formStyle}>
-                    <input type="password"
-                        placeholder="Mật khẩu *"
-                        {...register("matKhau")} />
-                    {errors.matKhau && <p>{errors.matKhau.message}</p>}
-                </div>
-
-
-                <div className={styles.buttonStyle}>
-                    <Button title="Đăng nhập" margin="10px 0 0 0" />
-                </div>
-            </div>
-        </form>
-    </div>;
+            </form>
+        </div>
+    );
 }
 
 export default LoginPage;

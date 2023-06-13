@@ -11,6 +11,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AdminTemplate />}>
+          <Route index element={<UserManagement />} />
           <Route path="/user-management">
             <Route index element={<UserManagement />} />
             <Route path="create" element={<CreateUserManagement />} />
