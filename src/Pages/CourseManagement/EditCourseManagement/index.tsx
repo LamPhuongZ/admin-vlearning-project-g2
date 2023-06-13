@@ -61,7 +61,6 @@ function EditCourseManagement({ }: Props) {
   const onEditCourse = async (courseId: string) => {
     try {
       const response = await getInfoCourseByIdAPI(courseId);
-      console.log(response);
 
       // update dữ  liệu vào ô Input
       setValue("maKhoaHoc", response.maKhoaHoc);
@@ -70,6 +69,15 @@ function EditCourseManagement({ }: Props) {
       setValue("moTa", response.moTa);
       setValue("luotXem", response.luotXem);
       setValue("hinhAnh", response.hinhAnh);
+      // setFileList([
+      //   ...fileList,
+      //   {
+      //     uid: "-1",
+      //     name: "image.png",
+      //     status: "done",
+      //     url: response.hinhAnh,
+      //   },
+      // ]);
       setValue("maNhom", response.maNhom);
       setValue("ngayTao", response.ngayTao);
       setValue("soLuongHocVien", response.soLuongHocVien);
@@ -91,7 +99,6 @@ function EditCourseManagement({ }: Props) {
       toast.warning("Vui lòng chọn hình ảnh");
       return;
     }
-
     try {
       const data = await updateCourseAPI({
         maKhoaHoc: values.maKhoaHoc,
@@ -387,6 +394,9 @@ function EditCourseManagement({ }: Props) {
                 <Upload
                   action="/upload.do"
                   {...field}
+                  onChange={({ fileList: newFileList }) => {
+                    setFileList(newFileList);
+                  }}
                   fileList={fileList}
                   listType="picture-card"
                 >
