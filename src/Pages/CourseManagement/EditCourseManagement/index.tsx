@@ -15,8 +15,7 @@ type Props = {}
 
 function EditCourseManagement({ }: Props) {
   const [categoriesCourse, setCategoriesCourse] = useState([]);
-  console.log(categoriesCourse)
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState<any>([]);
   const { courseId } = useParams();
   const navigate = useNavigate();
 
@@ -60,7 +59,6 @@ function EditCourseManagement({ }: Props) {
   const onEditCourse = async (courseId: string) => {
     try {
       const response = await getInfoCourseByIdAPI(courseId);
-      console.log(response);
 
       // update dữ  liệu vào ô Input
       setValue("maKhoaHoc", response.maKhoaHoc);
@@ -69,6 +67,15 @@ function EditCourseManagement({ }: Props) {
       setValue("moTa", response.moTa);
       setValue("luotXem", response.luotXem);
       setValue("hinhAnh", response.hinhAnh);
+      // setFileList([
+      //   ...fileList,
+      //   {
+      //     uid: "-1",
+      //     name: "image.png",
+      //     status: "done",
+      //     url: response.hinhAnh,
+      //   },
+      // ]);
       setValue("maNhom", response.maNhom);
       setValue("ngayTao", response.ngayTao);
       setValue("soLuongHocVien", response.soLuongHocVien);
@@ -87,10 +94,10 @@ function EditCourseManagement({ }: Props) {
 
   const onSubmit = async (values: UpdateCourseType) => {
     try {
-      // const payload = {
-      //   ...values,
-      //   hinhAnh: values.hinhAnh?.file?.originFileObj
-      // }
+      if (!fileList.length) {
+        toast.warning("Vui lòng chọn hình ảnh");
+        return;
+      }
 
       const data = await updateCourseAPI({
         maKhoaHoc: values.maKhoaHoc,
@@ -98,7 +105,10 @@ function EditCourseManagement({ }: Props) {
         tenKhoaHoc: values.tenKhoaHoc,
         moTa: values.moTa,
         luotXem: values.luotXem,
-        hinhAnh: values.hinhAnh,
+        hinhAnh:
+          fileList.length && fileList[0]?.originFileObj
+            ? fileList[0]?.originFileObj
+            : fileList[0].url,
         maNhom: values.maNhom,
         ngayTao: values.ngayTao,
         soLuongHocVien: values.soLuongHocVien,
@@ -382,6 +392,9 @@ function EditCourseManagement({ }: Props) {
                 <Upload
                   action="/upload.do"
                   {...field}
+                  onChange={({ fileList: newFileList }) => {
+                    setFileList(newFileList);
+                  }}
                   fileList={fileList}
                   listType="picture-card"
                 >
@@ -434,7 +447,7 @@ function EditCourseManagement({ }: Props) {
         </div>
 
         <div className={styles.formGroup}>
-          <Button title='Thêm Khóa Học' bgColor='rgb(65, 178, 148)' />
+          <Button title='Cập nhật Khóa Học' bgColor='rgb(65, 178, 148)' />
         </div>
       </form>
     </div>
