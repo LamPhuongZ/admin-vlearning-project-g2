@@ -5,6 +5,9 @@ import UserManagement from "./Pages/UserManagement";
 import CreateUserManagement from "./Pages/UserManagement/CreateUserManagement";
 import EditUserManagement from "./Pages/UserManagement/EditUserManagement";
 import AdminTemplate from "./Templates/AdminTemplate";
+import CourseManagement from "./Pages/CourseManagement";
+import CreateCourseManagement from "./Pages/CourseManagement/CreateCourseManagement";
+import EditCourseManagement from "./Pages/CourseManagement/EditCourseManagement";
 
 function App() {
   return (
@@ -18,7 +21,12 @@ function App() {
             <Route path="edit/:userId" element={<EditUserManagement />} />
           </Route>
 
-          <Route path="/course-management"></Route>
+          <Route path="/course-management">
+          <Route index element={<CourseManagement />} />
+            <Route path="create" element={<CreateCourseManagement />} />
+            <Route path="edit/:courseId" element={<EditCourseManagement />} />
+          </Route>
+
           <Route path="/courseRegister-management"></Route>
         </Route>
 

@@ -1,0 +1,35 @@
+
+.textTilte {
+    text-align: center;
+}
+
+.icon {
+    background-color: orangered;
+    color: white;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.formGroup {
+    margin: 20px 0 10px 0;
+    text-align: center;
+
+    input {
+        width: 50rem;
+        padding: 10px;
+    }
+
+    p {
+        color: orangered;
+    }
+
+    button {
+        width: 50rem;
+        padding: 15px;
+    }
+}
+
