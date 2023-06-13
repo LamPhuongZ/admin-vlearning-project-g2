@@ -15,6 +15,7 @@ type Props = {}
 
 function EditCourseManagement({ }: Props) {
   const [categoriesCourse, setCategoriesCourse] = useState([]);
+  console.log(categoriesCourse)
   const [fileList, setFileList] = useState([]);
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -60,21 +61,19 @@ function EditCourseManagement({ }: Props) {
     try {
       const response = await getInfoCourseByIdAPI(courseId);
       console.log(response);
-      if (response.length) {
-        const item = response[0];
-        // update dữ  liệu vào ô Input
-        setValue("maKhoaHoc", item.maKhoaHoc);
-        setValue("biDanh", item.biDanh);
-        setValue("tenKhoaHoc", item.tenKhoaHoc);
-        setValue("moTa", item.moTa);
-        setValue("luotXem", item.luotXem);
-        setValue("hinhAnh", item.hinhAnh);
-        setValue("maNhom", item.maNhom);
-        setValue("ngayTao", item.ngayTao);
-        setValue("soLuongHocVien", item.soLuongHocVien);
-        setValue("taiKhoanNguoiTao", item.taiKhoanNguoiTao);
-        setValue("maDanhMucKhoaHoc", item.maDanhMucKhoaHoc);
-      }
+
+      // update dữ  liệu vào ô Input
+      setValue("maKhoaHoc", response.maKhoaHoc);
+      setValue("biDanh", response.biDanh);
+      setValue("tenKhoaHoc", response.tenKhoaHoc);
+      setValue("moTa", response.moTa);
+      setValue("luotXem", response.luotXem);
+      setValue("hinhAnh", response.hinhAnh);
+      setValue("maNhom", response.maNhom);
+      setValue("ngayTao", response.ngayTao);
+      setValue("soLuongHocVien", response.soLuongHocVien);
+      setValue("taiKhoanNguoiTao", response.nguoiTao.taiKhoan);
+      setValue("maDanhMucKhoaHoc", response.danhMucKhoaHoc.maDanhMucKhoahoc);
     } catch (error) {
       toast.error("Thông tin không thể truy cập");
     }
@@ -224,7 +223,6 @@ function EditCourseManagement({ }: Props) {
                 <Input
                   type='number'
                   {...field}
-                  value={undefined}
                   placeholder="Lượt xem"
                 />
               )
@@ -245,7 +243,6 @@ function EditCourseManagement({ }: Props) {
                 <Select
                   style={{ width: '50rem', textAlign: 'left' }}
                   {...field}
-                  value={undefined}
                   placeholder="--Chọn Nhóm--"
 
                   options={[
@@ -314,7 +311,6 @@ function EditCourseManagement({ }: Props) {
                 <Input
                   type='number'
                   {...field}
-                  value={undefined}
                   placeholder="Số lượng học viên *"
                 />
               )
@@ -361,7 +357,6 @@ function EditCourseManagement({ }: Props) {
                 <Select
                   {...field}
                   style={{ width: '50rem', textAlign: 'left' }}
-                  value={undefined}
                   placeholder="--Chọn danh mục khóa học--"
                 >
                   {renderCategoriesCourse()}
