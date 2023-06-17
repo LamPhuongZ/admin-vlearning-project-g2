@@ -1,7 +1,14 @@
 .buttonStyle {
+  .registerButton {
+    font-size: 24px;
+    margin-right: 10px;
+    color: orange;
+    cursor: pointer;
+  }
+
   .deleteButton {
     font-size: 24px;
-    margin-right: 20px;
+    margin-right: 10px;
     color: red;
     cursor: pointer;
   }

@@ -3,6 +3,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "./Slice/userReducer";
+import courseReducer from "./Slice/courseListSlice";
 const persistConfig = {
   key: "root",
   storage: storage,
@@ -13,6 +14,7 @@ const pReducer = persistReducer(
   persistConfig,
   combineReducers({
     userReducer,
+    courseReducer,
   })
 );
 //1: ban đầu sẽ import "courseCategoriesSlice" đúng như bên slice của nó, nhưng vì export default nên mình đổi được tên và vì export chấm .reducer nên mình đặt là "courseCategoriesReducer" cho dễ hiểu

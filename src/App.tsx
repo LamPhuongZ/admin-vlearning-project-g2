@@ -26,8 +26,6 @@ function App() {
             <Route path="create" element={<CreateCourseManagement />} />
             <Route path="edit/:courseId" element={<EditCourseManagement />} />
           </Route>
-
-          <Route path="/courseRegister-management"></Route>
         </Route>
 
         <Route path="/login" element={<LoginPage />} />

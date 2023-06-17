@@ -1,0 +1,53 @@
+.registerUser {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+
+    h3 {
+        text-align: left;
+    }
+
+    form {
+        margin-bottom: 15px;
+    }
+
+    .border__bottom {
+        border-bottom: 1px solid #6c757d !important;
+    }
+
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 900;
+
+        .col__6 {
+            width: 50%;
+
+            .formStyle {
+                input {
+                    padding: 8px;
+                    width: 100%;
+                }
+            }
+        }
+
+        .col__3 {
+            width: 25% !important;
+        }
+
+        .registerUser__button {
+            text-align: right;
+        }
+    }
+
+    .registerUser__middle {
+        padding-top: 15px;
+        text-align: center;
+    }
+
+    .registerUser__bottom {
+        padding-top: 15px;
+    }
+}

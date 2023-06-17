@@ -4,10 +4,13 @@ import type { ColumnsType, TableProps } from 'antd/es/table';
 import { BookOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { deleteCourseAPI, getCourseListAPI } from '../../Redux/Service/courseListAPI';
 import { toast } from 'react-toastify';
-import { CourseType } from '../../Redux/Slice/courseListSlice';
+import { CourseType, fetchCourseListAction } from '../../Redux/Slice/courseListSlice';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Core/Button';
 import Search from '../../Core/Search';
+import RegisterCourse from './RegisterCourse';
+import { useDispatch, useSelector } from 'react-redux';
+import { DispatchType, RootState } from '../../Redux/store';
 
 type Props = {}
 
@@ -15,6 +18,7 @@ function CourseManagement({ }: Props) {
     const [dataSource, setDataSource] = useState<CourseType[]>([]);
     const [search, setSearch] = useState<CourseType[]>([]);
     const [filterData, setFIlterData] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     // Chuyển trang thêm khóa học
@@ -110,6 +114,9 @@ function CourseManagement({ }: Props) {
                     <Space>
                         <BookOutlined
                             style={{ color: "orange", fontSize: "20px" }}
+                            onClick={() => {
+                                showModal();
+                            }}
                         />
                         <EditOutlined
                             style={{ color: "green", fontSize: "20px" }}
@@ -159,7 +166,7 @@ function CourseManagement({ }: Props) {
         }
     }
 
-    // Hàm tìm kiếm kháo học
+    // Hàm tìm kiếm khóa học
     const handleSearchCourse = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value.length > 0) {
             const filterResult = search.filter((item) => item.tenKhoaHoc.toLocaleLowerCase().includes(event.target.value.toLowerCase()));
@@ -171,6 +178,13 @@ function CourseManagement({ }: Props) {
 
         setFIlterData(event.target.value)
     }
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div style={{ width: "100%" }}>
@@ -196,7 +210,17 @@ function CourseManagement({ }: Props) {
                 dataSource={dataSource}
                 onChange={onChange}
                 scroll={{ x: 400 }}
+                rowKey={(row) => row.maKhoaHoc}
             />
+
+            <Modal
+                open={isModalOpen}
+                onCancel={handleCancel}
+                footer={null}
+                width={900}
+            >
+                <RegisterCourse />
+            </Modal>
         </div>
     )
 }

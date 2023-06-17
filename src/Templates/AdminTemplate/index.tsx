@@ -52,21 +52,6 @@ function AdminTemplate() {
                                     },
                                 ],
                             },
-                            {
-                                key: "3",
-                                icon: <AuditOutlined />,
-                                label: "Quản Lý Ghi Danh",
-                                children: [
-                                    {
-                                        key: "3.1",
-                                        label: (
-                                            <Link to="/courseRegister-management">
-                                                Danh Sách Ghi Danh
-                                            </Link>
-                                        ),
-                                    },
-                                ],
-                            },
                         ]}
                     />
                 </Sider>
