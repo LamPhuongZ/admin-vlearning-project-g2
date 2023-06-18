@@ -4,12 +4,13 @@ import { Popconfirm, Select, Space, Table } from 'antd';
 import styles from './registerUser.module.scss'
 import cls from 'classnames'
 import Button from '../../../Core/Button';
-import Search from '../../../Core/Search';
 import Column from 'antd/es/table/Column';
 import { ColumnsType } from 'antd/es/table';
-import AsyncSelect from 'react-select/async';
 import { getCourseListAPI } from '../../../Redux/Service/courseListAPI';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
+import { CourseTypePayLoad } from '../../../Redux/Service/RegisterUserAPI';
+import { getCourseListApprovalAPI } from '../../../Redux/Service/RegisterCourseAPI';
 
 
 interface CourseType {
@@ -17,18 +18,20 @@ interface CourseType {
     tenKhoaHoc: string;
 }
 
+interface UserTypePayLoad {
+    taiKhoan: string;
+    hoTen: string;
+}
+
 type Props = {}
 
 function RegisterUser({ }: Props) {
+    const { userId } = useParams();
     const [courseList, setCourseList] = useState<CourseType[]>([]);
-    const [dataUserCourse, setDataUserCourse] = useState();
-    const [page, setPage] = useState(1);
+    const [dataUserCourse, setDataUserCourse] = useState<UserTypePayLoad[]>([]);
+    // const [page, setPage] = useState(1);
 
-    const columnsCourseWaitingApproval: ColumnsType<CourseType> = [
-        {
-            title: 'STT',
-            dataIndex: 'STT',
-        },
+    const columnsCourseWaitingApproval: ColumnsType<UserTypePayLoad> = [
         {
             title: 'Tài Khoản',
             dataIndex: 'taiKhoan',
@@ -53,11 +56,7 @@ function RegisterUser({ }: Props) {
         },
     ];
 
-    const columnsCourse: ColumnsType<CourseType> = [
-        {
-            title: 'STT',
-            dataIndex: 'STT',
-        },
+    const columnsCourse: ColumnsType<UserTypePayLoad> = [
         {
             title: 'Tài Khoản',
             dataIndex: 'taiKhoan',
@@ -84,7 +83,27 @@ function RegisterUser({ }: Props) {
         },
     ];
 
-  
+    const getUserListOfCourse = async (userId: string) => {
+        try {
+            const response = await getCourseListApprovalAPI(userId);
+            console.log(response);
+
+            setDataUserCourse(response);
+        } catch (error) {
+            toast.error("Không lấy được dữ liệu")
+        }
+    };
+
+    console.log(dataUserCourse);
+
+
+    useEffect(() => {
+        if (userId) {
+            console.log(userId);
+
+            getUserListOfCourse(userId);
+        }
+    }, [userId])
 
     // Lấy danh sách khóa học
     const getCourseList = async () => {
@@ -102,7 +121,7 @@ function RegisterUser({ }: Props) {
 
     // Hiển thị danh sách tài khoản để chọn
     const renderCourseList = () => {
-        return courseList.map((option: CourseType) => {
+        return courseList.map((option: CourseTypePayLoad) => {
             return (
                 <Select.Option key={option.maKhoaHoc} value={option.maKhoaHoc}>
                     {option.tenKhoaHoc}
@@ -158,14 +177,14 @@ function RegisterUser({ }: Props) {
 
                 <Table
                     columns={columnsCourseWaitingApproval}
-                    // dataSource={dataUserOfCourse}
+                    dataSource={dataUserCourse}
                     bordered
                 >
-                    <Column
+                    {/* <Column
                         title="STT"
                         key="STT"
                         render={(value, item, index) => (page - 1) * 10 + index}
-                    />
+                    /> */}
                 </Table>
             </div>
         </div>

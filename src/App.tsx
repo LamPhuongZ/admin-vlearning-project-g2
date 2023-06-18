@@ -8,6 +8,8 @@ import AdminTemplate from "./Templates/AdminTemplate";
 import CourseManagement from "./Pages/CourseManagement";
 import CreateCourseManagement from "./Pages/CourseManagement/CreateCourseManagement";
 import EditCourseManagement from "./Pages/CourseManagement/EditCourseManagement";
+import RegisterCourse from "./Pages/CourseManagement/RegisterCourse";
+import RegisterUser from "./Pages/UserManagement/RegisterUser";
 
 function App() {
   return (
@@ -19,12 +21,14 @@ function App() {
             <Route index element={<UserManagement />} />
             <Route path="create" element={<CreateUserManagement />} />
             <Route path="edit/:userId" element={<EditUserManagement />} />
+            <Route path="registerUser/:userId" element={<RegisterUser />} />
           </Route>
 
           <Route path="/course-management">
           <Route index element={<CourseManagement />} />
             <Route path="create" element={<CreateCourseManagement />} />
             <Route path="edit/:courseId" element={<EditCourseManagement />} />
+            <Route path="registerCourse/:courseId" element={<RegisterCourse />} />
           </Route>
         </Route>
 

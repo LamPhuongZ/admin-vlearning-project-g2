@@ -47,6 +47,11 @@ function UserManagement({ }: Props) {
         navigate("/user-management/create");
     };
 
+     // Chuyển trang ghi danh
+     const onNavigateRegisterUser = (userId: string) => {
+        navigate(`/user-management/registerUser/${userId}`);
+    }
+
     const columns: ColumnsType<DataType> = [
         {
             title: "Tài khoản",
@@ -90,7 +95,7 @@ function UserManagement({ }: Props) {
                         <BookOutlined
                             className={styles.registerButton}
                             onClick={() => {
-                                showModal();
+                                onNavigateRegisterUser(row.taiKhoan);
                             }}
                         />
 
@@ -105,17 +110,6 @@ function UserManagement({ }: Props) {
                     </div>
                 );
             },
-        },
-    ];
-
-    const data: DataType[] = [
-        {
-            key: 1,
-            taiKhoan: "abc",
-            hoTen: "aaa",
-            email: "aaa",
-            soDt: "123456",
-            maLoaiNguoiDung: "hv",
         },
     ];
 
@@ -188,14 +182,14 @@ function UserManagement({ }: Props) {
                 rowKey={(row) => row.taiKhoan}
             />
 
-            <Modal
+            {/* <Modal
                 open={isModalOpen}
                 onCancel={handleCancel}
                 footer={null}
                 width={900}
             >
                 <RegisterUser />
-            </Modal>
+            </Modal> */}
         </div>
     );
 }

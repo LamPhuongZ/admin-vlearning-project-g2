@@ -1,16 +1,35 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import { BookOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { deleteCourseAPI, getCourseListAPI } from '../../Redux/Service/courseListAPI';
 import { toast } from 'react-toastify';
-import { CourseType, fetchCourseListAction } from '../../Redux/Slice/courseListSlice';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Core/Button';
 import Search from '../../Core/Search';
 import RegisterCourse from './RegisterCourse';
-import { useDispatch, useSelector } from 'react-redux';
-import { DispatchType, RootState } from '../../Redux/store';
+
+interface CourseType {
+    maKhoaHoc: string;
+    biDanh: string;
+    tenKhoaHoc: string;
+    moTa: string;
+    luotXem: number;
+    hinhAnh: string;
+    maNhom: string;
+    ngayTao: string;
+    soLuongHocVien: number;
+    nguoiTao: {
+        taiKhoan: string;
+        hoTen: string;
+        maLoaiNguoiDung: string;
+        tenLoaiNguoiDung: string;
+    };
+    danhMucKhoaHoc: {
+        maDanhMucKhoahoc: string;
+        tenDanhMucKhoaHoc: string;
+    };
+};
 
 type Props = {}
 
@@ -19,6 +38,8 @@ function CourseManagement({ }: Props) {
     const [search, setSearch] = useState<CourseType[]>([]);
     const [filterData, setFIlterData] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [course, setCourse] = useState(null);
+
     const navigate = useNavigate();
 
     // Chuyển trang thêm khóa học
@@ -29,6 +50,11 @@ function CourseManagement({ }: Props) {
     // Chuyển trang chỉnh sửa thông tin
     const onNavigateEditCourse = (courseId: string) => {
         navigate(`/course-management/edit/${courseId}`);
+    }
+
+    // Chuyển trang ghi danh
+    const onNavigateRegisterCourse = (courseId: string) => {
+        navigate(`/course-management/registerCourse/${courseId}`);
     }
 
     const columns: ColumnsType<CourseType> = [
@@ -115,7 +141,7 @@ function CourseManagement({ }: Props) {
                         <BookOutlined
                             style={{ color: "orange", fontSize: "20px" }}
                             onClick={() => {
-                                showModal();
+                                onNavigateRegisterCourse(record.maKhoaHoc);
                             }}
                         />
                         <EditOutlined
@@ -159,7 +185,7 @@ function CourseManagement({ }: Props) {
     const onDeleteCourse = async (courseId: string) => {
         try {
             await deleteCourseAPI(courseId);
-            // toast.success("Xoá khóa học thành công!");
+            toast.success("Xoá khóa học thành công!");
             getCourseList();
         } catch (error) {
             toast.error("Xóa khóa học không thành công");
@@ -179,7 +205,8 @@ function CourseManagement({ }: Props) {
         setFIlterData(event.target.value)
     }
 
-    const showModal = () => {
+    const showModal = (row: any) => {
+        setCourse(row);
         setIsModalOpen(true);
     };
     const handleCancel = () => {
@@ -213,14 +240,14 @@ function CourseManagement({ }: Props) {
                 rowKey={(row) => row.maKhoaHoc}
             />
 
-            <Modal
+            {/* <Modal
                 open={isModalOpen}
                 onCancel={handleCancel}
                 footer={null}
                 width={900}
             >
                 <RegisterCourse />
-            </Modal>
+            </Modal> */}
         </div>
     )
 }

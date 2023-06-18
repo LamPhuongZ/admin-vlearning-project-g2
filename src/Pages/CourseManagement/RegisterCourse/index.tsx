@@ -8,26 +8,20 @@ import { toast } from 'react-toastify';
 import { listUserRequest } from '../../../Redux/Service/listUserAPI';
 import { CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import Column from 'antd/es/table/Column';
-import { CourseType } from '../../../Redux/Slice/courseListSlice';
-import { getCourseListNotRegister } from '../../../Redux/Service/RegisterCourseAPI';
+import { getUserListNotRegisterAPI } from '../../../Redux/Service/RegisterUserAPI';
 
 interface UserType {
     taiKhoan: string;
     hoTen: string;
 };
 
-type Props = {
-    // course: CourseType;
-}
+type Props = {}
 
 function RegisterCourse({ }: Props) {
     const [userList, setUserList] = useState<UserType[]>([]);
     const [dataUserOfCourse, setDataUserOfCourse] = useState([]);
+    const [selected, setSelected] = useState("");
     const [page, setPage] = useState(1);
-
-    // const {
-    //     maKhoaHoc,
-    // } = course;
 
     const columnsUserWaitingApproval: ColumnsType<UserType> = [
         {
@@ -125,12 +119,10 @@ function RegisterCourse({ }: Props) {
         }
     }
 
-
-
-    const onHandleRegister = async (account: string) => {
+    const onHandleRegister = async (accountId: string) => {
         try {
-            await getCourseListNotRegister(account);
-            toast.success("Ghi danh thành công")
+            // await getUserListNotRegisterAPI(accountId);
+            // toast.success("Ghi danh thành công")
         } catch (error) {
             toast.error("Ghi danh không thành công");
         }
@@ -160,7 +152,7 @@ function RegisterCourse({ }: Props) {
                             title='Ghi danh'
                             bgColor='#41b294'
                             onClick={() => {
-                                // onHandleRegister()
+                                onHandleRegister(selected)
                             }}
                         />
                     </div>
@@ -211,11 +203,11 @@ function RegisterCourse({ }: Props) {
                     dataSource={dataUserOfCourse}
                     bordered
                 >
-                    <Column
+                    {/* <Column
                         title="STT"
                         key="STT"
                         render={(value, item, index) => (page - 1) * 10 + index}
-                    />
+                    /> */}
                 </Table>
             </div>
         </div>

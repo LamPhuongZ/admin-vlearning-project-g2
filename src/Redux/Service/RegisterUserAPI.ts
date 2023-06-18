@@ -1,5 +1,10 @@
 import axiosClient from "../../Config/axiosClient";
 
+export type CourseTypePayLoad = {
+    maKhoaHoc: string;
+    tenKhoaHoc: string;
+}
+
 
 // Call APi lấy danh sách người dùng chưa ghi danh
 export const getUserListNotRegisterAPI = async (payload: string) => {
