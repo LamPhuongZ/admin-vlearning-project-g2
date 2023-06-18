@@ -9,7 +9,6 @@ import { ColumnsType } from 'antd/es/table';
 import { getCourseListAPI } from '../../../Redux/Service/courseListAPI';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
-import { CourseTypePayLoad } from '../../../Redux/Service/RegisterUserAPI';
 import { getCourseListApprovalAPI } from '../../../Redux/Service/RegisterCourseAPI';
 
 
@@ -18,7 +17,7 @@ interface CourseType {
     tenKhoaHoc: string;
 }
 
-interface UserTypePayLoad {
+interface UserType {
     taiKhoan: string;
     hoTen: string;
 }
@@ -28,10 +27,10 @@ type Props = {}
 function RegisterUser({ }: Props) {
     const { userId } = useParams();
     const [courseList, setCourseList] = useState<CourseType[]>([]);
-    const [dataUserCourse, setDataUserCourse] = useState<UserTypePayLoad[]>([]);
+    const [dataUserCourse, setDataUserCourse] = useState<UserType[]>([]);
     // const [page, setPage] = useState(1);
 
-    const columnsCourseWaitingApproval: ColumnsType<UserTypePayLoad> = [
+    const columnsCourseWaitingApproval: ColumnsType<UserType> = [
         {
             title: 'Tài Khoản',
             dataIndex: 'taiKhoan',
@@ -56,7 +55,7 @@ function RegisterUser({ }: Props) {
         },
     ];
 
-    const columnsCourse: ColumnsType<UserTypePayLoad> = [
+    const columnsCourse: ColumnsType<UserType> = [
         {
             title: 'Tài Khoản',
             dataIndex: 'taiKhoan',
@@ -121,7 +120,7 @@ function RegisterUser({ }: Props) {
 
     // Hiển thị danh sách tài khoản để chọn
     const renderCourseList = () => {
-        return courseList.map((option: CourseTypePayLoad) => {
+        return courseList.map((option: CourseType) => {
             return (
                 <Select.Option key={option.maKhoaHoc} value={option.maKhoaHoc}>
                     {option.tenKhoaHoc}

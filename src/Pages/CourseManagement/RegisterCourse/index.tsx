@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 import { listUserRequest } from '../../../Redux/Service/listUserAPI';
 import { CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import Column from 'antd/es/table/Column';
-import { getUserListNotRegisterAPI } from '../../../Redux/Service/RegisterUserAPI';
+import { getUserListNotRegisterAPI, getUserListOfCourseAPI } from '../../../Redux/Service/RegisterUserAPI';
+import { useParams } from 'react-router-dom';
 
 interface UserType {
     taiKhoan: string;
@@ -18,16 +19,12 @@ interface UserType {
 type Props = {}
 
 function RegisterCourse({ }: Props) {
+    const { courseId } = useParams();
     const [userList, setUserList] = useState<UserType[]>([]);
     const [dataUserOfCourse, setDataUserOfCourse] = useState([]);
-    const [selected, setSelected] = useState("");
     const [page, setPage] = useState(1);
 
     const columnsUserWaitingApproval: ColumnsType<UserType> = [
-        {
-            title: 'STT',
-            dataIndex: 'STT',
-        },
         {
             title: 'Tài Khoản',
             dataIndex: 'taiKhoan',
@@ -54,10 +51,6 @@ function RegisterCourse({ }: Props) {
 
     const columnsUserOfCourse: ColumnsType<UserType> = [
         {
-            title: 'STT',
-            dataIndex: 'STT',
-        },
-        {
             title: 'Tài Khoản',
             dataIndex: 'taiKhoan',
         },
@@ -82,6 +75,22 @@ function RegisterCourse({ }: Props) {
             ),
         },
     ];
+
+    // Call API lấy danh sách học viên khóa học
+    const getUserListOfCourse = async (courseId: string) => {
+        try {
+            const response = await getUserListOfCourseAPI(courseId);
+            setDataUserOfCourse(response);
+        } catch (error) {
+            toast.error("Không lấy được danh sách");
+        }
+    };
+
+    useEffect(() => {
+        if (courseId) {
+            getUserListOfCourse(courseId);
+        }
+    }, [courseId]);
 
     // Call lấy danh sách tài khoản
     const getUserList = async () => {
@@ -152,7 +161,7 @@ function RegisterCourse({ }: Props) {
                             title='Ghi danh'
                             bgColor='#41b294'
                             onClick={() => {
-                                onHandleRegister(selected)
+                                // onHandleRegister(selected)
                             }}
                         />
                     </div>

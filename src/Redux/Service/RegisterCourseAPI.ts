@@ -20,7 +20,7 @@ export const getCourseListWaitingApprovalAPI = async (payload: string) => {
     }
 }
 
-// Call API lấy danh sách khóa học chwof xét duyệt
+// Call API lấy danh sách khóa học chờ xét duyệt
 export const getCourseListApprovalAPI = async (payload: string) => {
     try {
         const response = await axiosClient.post(`QuanLyNguoiDung/LayDanhSachKhoaHocDaXetDuyet`, payload);
