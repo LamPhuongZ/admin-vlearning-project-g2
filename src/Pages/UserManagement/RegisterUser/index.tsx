@@ -17,27 +17,17 @@ interface CourseType {
     tenKhoaHoc: string;
 }
 
-interface UserType {
-    taiKhoan: string;
-    hoTen: string;
-}
-
 type Props = {}
 
 function RegisterUser({ }: Props) {
     const { userId } = useParams();
     const [courseList, setCourseList] = useState<CourseType[]>([]);
-    const [dataUserCourse, setDataUserCourse] = useState<UserType[]>([]);
-    // const [page, setPage] = useState(1);
+    const [dataUserCourse, setDataUserCourse] = useState([]);
 
-    const columnsCourseWaitingApproval: ColumnsType<UserType> = [
+    const columnsCourseWaitingApproval: ColumnsType<CourseType> = [
         {
-            title: 'Tài Khoản',
-            dataIndex: 'taiKhoan',
-        },
-        {
-            title: 'Học Viên',
-            dataIndex: 'hoTen',
+            title: 'Tên khóa học',
+            dataIndex: 'tenKhoaHoc',
         },
         {
             title: 'Chờ Xác Nhận',
@@ -55,14 +45,10 @@ function RegisterUser({ }: Props) {
         },
     ];
 
-    const columnsCourse: ColumnsType<UserType> = [
+    const columnsCourse: ColumnsType<CourseType> = [
         {
-            title: 'Tài Khoản',
-            dataIndex: 'taiKhoan',
-        },
-        {
-            title: 'Học Viên',
-            dataIndex: 'hoTen',
+            title: 'Tên khóa học',
+            dataIndex: 'tenKhoaHoc',
         },
         {
             title: 'Chờ Xác Nhận',
@@ -170,7 +156,7 @@ function RegisterUser({ }: Props) {
 
             <div className={styles.registerUser__bottom}>
                 <div className={styles.row}>
-                    <h3 className={styles.col__6}>Học viên đã tham gia khóa học</h3>
+                    <h3 className={styles.col__6}>Khóa học đã ghi danh</h3>
                 </div>
                 {"."}
 
@@ -179,11 +165,6 @@ function RegisterUser({ }: Props) {
                     dataSource={dataUserCourse}
                     bordered
                 >
-                    {/* <Column
-                        title="STT"
-                        key="STT"
-                        render={(value, item, index) => (page - 1) * 10 + index}
-                    /> */}
                 </Table>
             </div>
         </div>

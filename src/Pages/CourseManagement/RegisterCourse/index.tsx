@@ -22,7 +22,7 @@ function RegisterCourse({ }: Props) {
     const { courseId } = useParams();
     const [userList, setUserList] = useState<UserType[]>([]);
     const [dataUserOfCourse, setDataUserOfCourse] = useState([]);
-    const [page, setPage] = useState(1);
+    // const [page, setPage] = useState(1);
 
     const columnsUserWaitingApproval: ColumnsType<UserType> = [
         {
@@ -85,6 +85,9 @@ function RegisterCourse({ }: Props) {
             toast.error("Không lấy được danh sách");
         }
     };
+
+    console.log(dataUserOfCourse);
+    
 
     useEffect(() => {
         if (courseId) {
