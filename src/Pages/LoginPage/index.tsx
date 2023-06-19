@@ -7,8 +7,6 @@ import Button from "../../Core/Button";
 import { LoginPayload } from "../../Redux/Service/loginAPI";
 import { loginAction } from "../../Redux/Slice/userReducer";
 import useCustomDispatch from "../../Hooks/useCustomDispatch";
-import { useSelector } from "react-redux";
-import { RootState } from "../../Redux/store";
 import { Navigate, useSearchParams } from "react-router-dom";
 import useCustomSelector from "../../Hooks/useCustomSelector";
 

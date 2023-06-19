@@ -1,13 +1,34 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { Modal, Popconfirm, Space, Table } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import { BookOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { deleteCourseAPI, getCourseListAPI } from '../../Redux/Service/courseListAPI';
 import { toast } from 'react-toastify';
-import { CourseType } from '../../Redux/Slice/courseListSlice';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Core/Button';
 import Search from '../../Core/Search';
+
+interface CourseType {
+    maKhoaHoc: string;
+    biDanh: string;
+    tenKhoaHoc: string;
+    moTa: string;
+    luotXem: number;
+    hinhAnh: string;
+    maNhom: string;
+    ngayTao: string;
+    soLuongHocVien: number;
+    nguoiTao: {
+        taiKhoan: string;
+        hoTen: string;
+        maLoaiNguoiDung: string;
+        tenLoaiNguoiDung: string;
+    };
+    danhMucKhoaHoc: {
+        maDanhMucKhoahoc: string;
+        tenDanhMucKhoaHoc: string;
+    };
+};
 
 type Props = {}
 
@@ -15,6 +36,7 @@ function CourseManagement({ }: Props) {
     const [dataSource, setDataSource] = useState<CourseType[]>([]);
     const [search, setSearch] = useState<CourseType[]>([]);
     const [filterData, setFIlterData] = useState('');
+
     const navigate = useNavigate();
 
     // Chuyển trang thêm khóa học
@@ -25,6 +47,11 @@ function CourseManagement({ }: Props) {
     // Chuyển trang chỉnh sửa thông tin
     const onNavigateEditCourse = (courseId: string) => {
         navigate(`/course-management/edit/${courseId}`);
+    }
+
+    // Chuyển trang ghi danh
+    const onNavigateRegisterCourse = (courseId: string) => {
+        navigate(`/course-management/registerCourse/${courseId}`);
     }
 
     const columns: ColumnsType<CourseType> = [
@@ -110,6 +137,9 @@ function CourseManagement({ }: Props) {
                     <Space>
                         <BookOutlined
                             style={{ color: "orange", fontSize: "20px" }}
+                            onClick={() => {
+                                onNavigateRegisterCourse(record.maKhoaHoc);
+                            }}
                         />
                         <EditOutlined
                             style={{ color: "green", fontSize: "20px" }}
@@ -152,14 +182,14 @@ function CourseManagement({ }: Props) {
     const onDeleteCourse = async (courseId: string) => {
         try {
             await deleteCourseAPI(courseId);
-            // toast.success("Xoá khóa học thành công!");
+            toast.success("Xoá khóa học thành công!");
             getCourseList();
         } catch (error) {
             toast.error("Xóa khóa học không thành công");
         }
     }
 
-    // Hàm tìm kiếm kháo học
+    // Hàm tìm kiếm khóa học
     const handleSearchCourse = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value.length > 0) {
             const filterResult = search.filter((item) => item.tenKhoaHoc.toLocaleLowerCase().includes(event.target.value.toLowerCase()));
@@ -196,6 +226,7 @@ function CourseManagement({ }: Props) {
                 dataSource={dataSource}
                 onChange={onChange}
                 scroll={{ x: 400 }}
+                rowKey={(row) => row.maKhoaHoc}
             />
         </div>
     )

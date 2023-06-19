@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./userManagement.module.scss";
 import Button from "../../Core/Button";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { BookOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Search from "../../Core/Search";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -26,6 +26,7 @@ type Props = {};
 
 function UserManagement({ }: Props) {
     const [accounts, setAccounts] = useState<DataType[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchParams] = useSearchParams();
     const inputSearchRef = useRef("");
     const navigate = useNavigate();
@@ -44,6 +45,11 @@ function UserManagement({ }: Props) {
     const handleNavigateToCreateUser = () => {
         navigate("/user-management/create");
     };
+
+    // Chuyển trang ghi danh
+    const onNavigateRegisterUser = (userId: string) => {
+        navigate(`/user-management/registerUser/${userId}`);
+    }
 
     const columns: ColumnsType<DataType> = [
         {
@@ -85,6 +91,13 @@ function UserManagement({ }: Props) {
             render: (_, row) => {
                 return (
                     <div className={styles.buttonStyle}>
+                        <BookOutlined
+                            className={styles.registerButton}
+                            onClick={() => {
+                                onNavigateRegisterUser(row.taiKhoan);
+                            }}
+                        />
+
                         <DeleteOutlined
                             className={styles.deleteButton}
                             onClick={() => fetchDeleteUser(row.taiKhoan)}
@@ -96,17 +109,6 @@ function UserManagement({ }: Props) {
                     </div>
                 );
             },
-        },
-    ];
-
-    const data: DataType[] = [
-        {
-            key: 1,
-            taiKhoan: "abc",
-            hoTen: "aaa",
-            email: "aaa",
-            soDt: "123456",
-            maLoaiNguoiDung: "hv",
         },
     ];
 
