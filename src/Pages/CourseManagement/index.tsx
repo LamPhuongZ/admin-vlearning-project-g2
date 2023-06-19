@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Popconfirm, Space, Table } from 'antd';
+import { Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import { BookOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { deleteCourseAPI, getCourseListAPI } from '../../Redux/Service/courseListAPI';
@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Core/Button';
 import Search from '../../Core/Search';
-import RegisterCourse from './RegisterCourse';
 
 interface CourseType {
     maKhoaHoc: string;
@@ -37,8 +36,6 @@ function CourseManagement({ }: Props) {
     const [dataSource, setDataSource] = useState<CourseType[]>([]);
     const [search, setSearch] = useState<CourseType[]>([]);
     const [filterData, setFIlterData] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [course, setCourse] = useState(null);
 
     const navigate = useNavigate();
 
@@ -205,14 +202,6 @@ function CourseManagement({ }: Props) {
         setFIlterData(event.target.value)
     }
 
-    const showModal = (row: any) => {
-        setCourse(row);
-        setIsModalOpen(true);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-
     return (
         <div style={{ width: "100%" }}>
             <h2>QUẢN LÝ KHÓA HỌC</h2>
@@ -239,15 +228,6 @@ function CourseManagement({ }: Props) {
                 scroll={{ x: 400 }}
                 rowKey={(row) => row.maKhoaHoc}
             />
-
-            {/* <Modal
-                open={isModalOpen}
-                onCancel={handleCancel}
-                footer={null}
-                width={900}
-            >
-                <RegisterCourse />
-            </Modal> */}
         </div>
     )
 }

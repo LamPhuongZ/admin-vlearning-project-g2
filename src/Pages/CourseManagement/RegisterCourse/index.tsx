@@ -5,15 +5,16 @@ import cls from 'classnames'
 import { Popconfirm, Select, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { toast } from 'react-toastify';
-import { listUserRequest } from '../../../Redux/Service/listUserAPI';
 import { CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import Column from 'antd/es/table/Column';
-import { getUserListNotRegisterAPI, getUserListOfCourseAPI } from '../../../Redux/Service/RegisterUserAPI';
+import { DeleteCourseOfUserPayload, courseOfUserRegisterAPI, deleteCourseOfUserRegisterAPI, getUserListNotRegisterAPI, getUserListOfCourseAPI, getUserListWaitingApprovalAPI } from '../../../Redux/Service/RegisterUserAPI';
 import { useParams } from 'react-router-dom';
+import Search from '../../../Core/Search';
 
 interface UserType {
     taiKhoan: string;
     hoTen: string;
+
+    // maKhoaHoc: string;
 };
 
 type Props = {}
@@ -21,13 +22,25 @@ type Props = {}
 function RegisterCourse({ }: Props) {
     const { courseId } = useParams();
     const [userList, setUserList] = useState<UserType[]>([]);
-    const [dataUserOfCourse, setDataUserOfCourse] = useState([]);
-    // const [page, setPage] = useState(1);
+    const [dataUserOfCourse, setDataUserOfCourse] = useState<UserType[]>([]);
+    const [dataUserWaitingApproval, setDataUserWaitingApproval] = useState<UserType[]>([]);
+    const [search, setSearch] = useState<UserType[]>([]);
+    const [searchWaitingApproval, setSearchWaitingApproval] = useState<UserType[]>([]);
+    const [filterData, setFIlterData] = useState('');
+    const [filterDataWaitingApproval, setFIlterDataWaitingApproval] = useState('');
+    const [page, setPage] = useState(1);
 
     const columnsUserWaitingApproval: ColumnsType<UserType> = [
         {
+            title: 'STT',
+            dataIndex: 'STT',
+            key: 'STT',
+            render: (text: string, record: any, index: number) => (page - 1) * 10 + index + 1,
+        },
+        {
             title: 'Tài Khoản',
             dataIndex: 'taiKhoan',
+
         },
         {
             title: 'Học Viên',
@@ -38,19 +51,29 @@ function RegisterCourse({ }: Props) {
             key: 'choXacNhan',
             render: (_, record) => (
                 <Space>
-                    <Popconfirm title='Bạn có chắc muốn xóa khóa học này không ?' onConfirm={() => onDeleteCourse(record.taiKhoan)}>
+                    <CheckCircleOutlined
+                        style={{ color: "green", fontSize: "20px" }}
+                    />
+
+                    <Popconfirm title='Bạn có chắc muốn xóa học viên này không ?' >
                         <DeleteOutlined
                             style={{ color: "red", fontSize: "20px" }}
 
                         />
                     </Popconfirm>
-                </Space>
+                </Space >
             ),
         },
     ];
 
     const columnsUserOfCourse: ColumnsType<UserType> = [
         {
+            title: 'STT',
+            dataIndex: 'STT',
+            key: 'STT',
+            render: (text: string, record: any, index: number) => (page - 1) * 10 + index + 1,
+        },
+        {
             title: 'Tài Khoản',
             dataIndex: 'taiKhoan',
         },
@@ -63,9 +86,14 @@ function RegisterCourse({ }: Props) {
             key: 'choXacNhan',
             render: (_, record) => (
                 <Space>
-                    <CheckCircleOutlined />
-
-                    <Popconfirm title='Bạn có chắc muốn xóa khóa học này không ?' onConfirm={() => onDeleteCourse(record.taiKhoan)}>
+                    <Popconfirm
+                        title='Bạn có chắc muốn xóa học viên này không ?'
+                        onConfirm={() => {
+                            if (courseId) {
+                                onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: record.taiKhoan })
+                            }
+                        }}
+                    >
                         <DeleteOutlined
                             style={{ color: "red", fontSize: "20px" }}
 
@@ -76,18 +104,35 @@ function RegisterCourse({ }: Props) {
         },
     ];
 
-    // Call API lấy danh sách học viên khóa học
-    const getUserListOfCourse = async (courseId: string) => {
+    // Call API lấy danh sách học viên chờ xét duyệt
+    const getUserListWaitingApproval = async (courseId: string) => {
         try {
-            const response = await getUserListOfCourseAPI(courseId);
-            setDataUserOfCourse(response);
+            let payload = { maKhoaHoc: courseId }
+            const response = await getUserListWaitingApprovalAPI(payload);
+            setDataUserWaitingApproval(response);
+            setSearchWaitingApproval(response);
         } catch (error) {
             toast.error("Không lấy được danh sách");
         }
     };
 
-    console.log(dataUserOfCourse);
-    
+    useEffect(() => {
+        if (courseId) {
+            getUserListWaitingApproval(courseId);
+        }
+    }, [courseId]);
+
+    // Call API lấy danh sách học viên khóa học
+    const getUserListOfCourse = async (courseId: string) => {
+        try {
+            let payload = { maKhoaHoc: courseId }
+            const response = await getUserListOfCourseAPI(payload);
+            setDataUserOfCourse(response);
+            setSearch(response);
+        } catch (error) {
+            toast.error("Không lấy được danh sách");
+        }
+    };
 
     useEffect(() => {
         if (courseId) {
@@ -95,10 +140,11 @@ function RegisterCourse({ }: Props) {
         }
     }, [courseId]);
 
-    // Call lấy danh sách tài khoản
-    const getUserList = async () => {
+    // Call lấy danh sách người dùng chưa ghi danh
+    const getUserList = async (courseId: string) => {
         try {
-            const response = await listUserRequest();
+            let payload = { maKhoaHoc: courseId }
+            const response = await getUserListNotRegisterAPI(payload);
             setUserList(response);
         } catch (error) {
             toast.error("Không lấy được danh sách người dùng");
@@ -106,8 +152,10 @@ function RegisterCourse({ }: Props) {
     }
 
     useEffect(() => {
-        getUserList();
-    }, []);
+        if (courseId) {
+            getUserList(courseId);
+        }
+    }, [courseId]);
 
     // Hiển thị danh sách tài khoản để chọn
     const renderUserList = () => {
@@ -120,25 +168,42 @@ function RegisterCourse({ }: Props) {
         })
     };
 
-    // Hàm xóa dữ liệu
-    const onDeleteCourse = async (account: string) => {
+    // Hàm xóa học viên đã tham gia khóa học
+    const onDeleteUserListOfCourse = async (values: DeleteCourseOfUserPayload) => {
         try {
-            // await deleteCourseAPI(courseId);
-            // // toast.success("Xoá khóa học thành công!");
-            // getCourseList();
+            const dataResult = await deleteCourseOfUserRegisterAPI(values);
+            toast.success("Hủy ghi danh thành công");
         } catch (error) {
-            toast.error("Xóa khóa học không thành công");
+            toast.error("Huỷ ghi danh không thành công");
         }
-    }
+    };
 
-    const onHandleRegister = async (accountId: string) => {
-        try {
-            // await getUserListNotRegisterAPI(accountId);
-            // toast.success("Ghi danh thành công")
-        } catch (error) {
-            toast.error("Ghi danh không thành công");
+
+    // Hàm tìm kiếm học viên đã tham gia khóa học
+    const handleSearchUserListOfCourse = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value.length > 0) {
+            const filterResult = search.filter((item) => item.hoTen.toLocaleLowerCase().includes(event.target.value.toLowerCase()));
+            setDataUserOfCourse(filterResult);
         }
-    }
+        else {
+            setDataUserOfCourse(search);
+        }
+
+        setFIlterData(event.target.value)
+    };
+
+    // Hàm tìm kiếm học viên chờ xác thực
+    const handleSearchUserListWaitingApproval = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value.length > 0) {
+            const filterResult = searchWaitingApproval.filter((item) => item.hoTen.toLocaleLowerCase().includes(event.target.value.toLowerCase()));
+            setDataUserWaitingApproval(filterResult);
+        }
+        else {
+            setDataUserWaitingApproval(searchWaitingApproval);
+        }
+
+        setFIlterDataWaitingApproval(event.target.value);
+    };
 
     return (
         <div className={styles.registerCourse}>
@@ -163,9 +228,6 @@ function RegisterCourse({ }: Props) {
                         <Button
                             title='Ghi danh'
                             bgColor='#41b294'
-                            onClick={() => {
-                                // onHandleRegister(selected)
-                            }}
                         />
                     </div>
                 </div>
@@ -177,19 +239,19 @@ function RegisterCourse({ }: Props) {
 
                     <div className={styles.col__6}>
                         <div className={styles.formStyle}>
-                            {/* <Search
+                            <Search
                                 placeholder="Nhập tên học viên"
-                            // value={filterData}
-                            // onChange={(event) => handleSearchCourse(event)}
-                            /> */}
+                                value={filterDataWaitingApproval}
+                                onChange={(event) => handleSearchUserListWaitingApproval(event)}
+                            />
                         </div>
                     </div>
                 </div>
                 {"."}
 
                 <Table
-                    columns={columnsUserOfCourse}
-                    // dataSource={data}
+                    columns={columnsUserWaitingApproval}
+                    dataSource={dataUserWaitingApproval}
                     bordered
                 />
             </div>
@@ -200,26 +262,21 @@ function RegisterCourse({ }: Props) {
 
                     <div className={styles.col__6}>
                         <div className={styles.formStyle}>
-                            {/* <Search
+                            <Search
                                 placeholder="Nhập tên học viên"
-                            // value={filterData}
-                            // onChange={(event) => handleSearchCourse(event)}
-                            /> */}
+                                value={filterData}
+                                onChange={(event) => handleSearchUserListOfCourse(event)}
+                            />
                         </div>
                     </div>
                 </div>
                 {"."}
 
                 <Table
-                    columns={columnsUserWaitingApproval}
+                    columns={columnsUserOfCourse}
                     dataSource={dataUserOfCourse}
                     bordered
                 >
-                    {/* <Column
-                        title="STT"
-                        key="STT"
-                        render={(value, item, index) => (page - 1) * 10 + index}
-                    /> */}
                 </Table>
             </div>
         </div>

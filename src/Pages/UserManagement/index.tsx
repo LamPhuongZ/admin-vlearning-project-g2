@@ -3,7 +3,7 @@ import styles from "./userManagement.module.scss";
 import Button from "../../Core/Button";
 import { BookOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Search from "../../Core/Search";
-import { Modal, Table } from "antd";
+import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
     deleteUserRequest,
@@ -12,7 +12,6 @@ import {
 } from "../../Redux/Service/listUserAPI";
 import { toast } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import RegisterUser from "./RegisterUser";
 
 interface DataType {
     key: React.Key;
@@ -47,8 +46,8 @@ function UserManagement({ }: Props) {
         navigate("/user-management/create");
     };
 
-     // Chuyển trang ghi danh
-     const onNavigateRegisterUser = (userId: string) => {
+    // Chuyển trang ghi danh
+    const onNavigateRegisterUser = (userId: string) => {
         navigate(`/user-management/registerUser/${userId}`);
     }
 
@@ -151,13 +150,6 @@ function UserManagement({ }: Props) {
         }
     }, [searchParams.get(`query`)]);
 
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-
     return (
         <div className={styles.container}>
             <h2>Danh sách người dùng</h2>
@@ -181,15 +173,6 @@ function UserManagement({ }: Props) {
                 dataSource={accounts}
                 rowKey={(row) => row.taiKhoan}
             />
-
-            {/* <Modal
-                open={isModalOpen}
-                onCancel={handleCancel}
-                footer={null}
-                width={900}
-            >
-                <RegisterUser />
-            </Modal> */}
         </div>
     );
 }
