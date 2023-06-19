@@ -6,15 +6,15 @@ import { Popconfirm, Select, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { toast } from 'react-toastify';
 import { CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import { DeleteCourseOfUserPayload, courseOfUserRegisterAPI, deleteCourseOfUserRegisterAPI, getUserListNotRegisterAPI, getUserListOfCourseAPI, getUserListWaitingApprovalAPI } from '../../../Redux/Service/RegisterUserAPI';
+import { CourseOfUserRegisterPayload, DeleteCourseOfUserPayload, courseOfUserRegisterAPI, deleteCourseOfUserRegisterAPI, getUserListNotRegisterAPI, getUserListOfCourseAPI, getUserListWaitingApprovalAPI } from '../../../Redux/Service/RegisterUserAPI';
 import { useParams } from 'react-router-dom';
 import Search from '../../../Core/Search';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../Redux/store';
 
 interface UserType {
     taiKhoan: string;
     hoTen: string;
-
-    // maKhoaHoc: string;
 };
 
 type Props = {}
@@ -29,6 +29,10 @@ function RegisterCourse({ }: Props) {
     const [filterData, setFIlterData] = useState('');
     const [filterDataWaitingApproval, setFIlterDataWaitingApproval] = useState('');
     const [page, setPage] = useState(1);
+
+    const { user } = useSelector((state: RootState) => {
+        return state.userReducer;
+    });
 
     const columnsUserWaitingApproval: ColumnsType<UserType> = [
         {
@@ -53,9 +57,21 @@ function RegisterCourse({ }: Props) {
                 <Space>
                     <CheckCircleOutlined
                         style={{ color: "green", fontSize: "20px" }}
+                        onClick={() => {
+                            if (courseId) {
+                                handleCourseRegister({ maKhoaHoc: courseId, taiKhoan: record.taiKhoan })
+                            }
+                        }}
                     />
 
-                    <Popconfirm title='Bạn có chắc muốn xóa học viên này không ?' >
+                    <Popconfirm
+                        title='Bạn có chắc muốn xóa học viên này không ?'
+                        onConfirm={() => {
+                            if (user && courseId) {
+                                onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: user.taiKhoan })
+                            }
+                        }}
+                    >
                         <DeleteOutlined
                             style={{ color: "red", fontSize: "20px" }}
 
@@ -89,8 +105,8 @@ function RegisterCourse({ }: Props) {
                     <Popconfirm
                         title='Bạn có chắc muốn xóa học viên này không ?'
                         onConfirm={() => {
-                            if (courseId) {
-                                onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: record.taiKhoan })
+                            if (user && courseId) {
+                                onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: user.taiKhoan })
                             }
                         }}
                     >
@@ -168,13 +184,29 @@ function RegisterCourse({ }: Props) {
         })
     };
 
+    // Call học viên chờ xác thực
+    const handleCourseRegister = async (values: CourseOfUserRegisterPayload) => {
+        try {
+            await courseOfUserRegisterAPI(values);
+            getUserListWaitingApproval(courseId || "");
+            getUserListOfCourse(courseId || "");
+            toast.success("Xác thực ghi danh thành công")
+        } catch (error) {
+            toast.error("Xác thực ghi danh không thành công");
+        }
+    };
+
     // Hàm xóa học viên đã tham gia khóa học
     const onDeleteUserListOfCourse = async (values: DeleteCourseOfUserPayload) => {
         try {
             const dataResult = await deleteCourseOfUserRegisterAPI(values);
+            getUserListWaitingApproval(courseId || "");
+            getUserListOfCourse(courseId || "");
             toast.success("Hủy ghi danh thành công");
-        } catch (error) {
-            toast.error("Huỷ ghi danh không thành công");
+        } catch (error: any) {
+            // toast.error(error.content.messager);
+            console.log(error);
+
         }
     };
 

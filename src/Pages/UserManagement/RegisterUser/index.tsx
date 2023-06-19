@@ -10,6 +10,9 @@ import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { courseRegisterAPI, CourseRegisterPayload, DeleteCoursePayload, courseListApprovalAPI, courseListWaitingApprovalAPI, deleteCourseRegisterAPI } from '../../../Redux/Service/RegisterCourseAPI';
 import Search from '../../../Core/Search';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../Redux/store';
+import { useForm } from "react-hook-form";
 
 interface CourseType {
     maKhoaHoc: string;
@@ -29,12 +32,20 @@ function RegisterUser({ }: Props) {
     const [filterDataWaitingApproval, setFIlterDataWaitingApproval] = useState('');
     const [page, setPage] = useState(1);
 
+    const { user } = useSelector((state: RootState) => {
+        return state.userReducer;
+    });
+
     const columnsCourseWaitingApproval: ColumnsType<CourseType> = [
         {
             title: 'STT',
             dataIndex: 'STT',
             key: 'STT',
             render: (text: string, record: any, index: number) => (page - 1) * 10 + index + 1,
+        },
+        {
+            title: 'Mã khóa học',
+            dataIndex: 'maKhoaHoc',
         },
         {
             title: 'Tên khóa học',
@@ -57,8 +68,8 @@ function RegisterUser({ }: Props) {
                     <Popconfirm
                         title='Bạn có chắc muốn xóa khóa học này không ?'
                         onConfirm={() => {
-                            if (userId) {
-                                handleDeleteRegister({ maKhoaHoc: record.maKhoaHoc, taiKhoan: userId })
+                            if (user) {
+                                handleDeleteRegister({ maKhoaHoc: record.maKhoaHoc, taiKhoan: user.taiKhoan })
                             }
                         }}
                     >
@@ -79,6 +90,10 @@ function RegisterUser({ }: Props) {
             render: (text: string, record: any, index: number) => (page - 1) * 10 + index + 1,
         },
         {
+            title: 'Mã khóa học',
+            dataIndex: 'maKhoaHoc',
+        },
+        {
             title: 'Tên khóa học',
             dataIndex: 'tenKhoaHoc',
         },
@@ -90,8 +105,8 @@ function RegisterUser({ }: Props) {
                     <Popconfirm
                         title='Bạn có chắc muốn xóa khóa học này không ?'
                         onConfirm={() => {
-                            if (userId) {
-                                handleDeleteRegister({ maKhoaHoc: record.maKhoaHoc, taiKhoan: userId })
+                            if (user) {
+                                handleDeleteRegister({ maKhoaHoc: record.maKhoaHoc, taiKhoan: user.taiKhoan })
                             }
                         }}
                     >
@@ -149,7 +164,7 @@ function RegisterUser({ }: Props) {
         } catch (error) {
             toast.error("Không lấy được danh sách khóa học");
         }
-    }
+    };
 
     useEffect(() => {
         getCourseList();
@@ -196,22 +211,34 @@ function RegisterUser({ }: Props) {
     const handleCourseRegister = async (values: CourseRegisterPayload) => {
         try {
             await courseRegisterAPI(values);
+            courseApproval(userId || "");
+            courseWaitingApproval(userId || "");
             toast.success("Xác thực ghi danh thành công")
         } catch (error) {
             toast.error("Xác thực ghi danh không thành công");
         }
-    }
+    };
 
     // Hủy ghi danh
     const handleDeleteRegister = async (values: DeleteCoursePayload) => {
         try {
-            await deleteCourseRegisterAPI(values);
+            const response = await deleteCourseRegisterAPI(values);
+            courseApproval(userId || "");
+            courseWaitingApproval(userId || "");
             toast.success("Hủy ghi danh thành công");
         } catch (error) {
             toast.error("Huỷ ghi danh không thành công");
         }
-    }
+    };
 
+    const {
+        handleSubmit,
+    } = useForm({
+        defaultValues: {
+            taiKhoan: "",
+            maKhoaHoc: "",
+        },
+    });
 
     return (
         <div className={styles.registerUser}>
@@ -219,7 +246,7 @@ function RegisterUser({ }: Props) {
                 <div className={styles.row}>
                     <h3 className={styles.col__3}>Chọn khóa học</h3>
 
-                    <form className={styles.col__6}>
+                    <form className={styles.col__6} >
                         <div className={styles.formStyle}>
                             <Select
                                 style={{ width: "100%" }}
@@ -230,11 +257,12 @@ function RegisterUser({ }: Props) {
                                 {renderCourseList()}
                             </Select>
                         </div>
+
+                        <div className={cls(styles.formStyle)}>
+                            <Button title='Ghi danh' bgColor='#41b294' />
+                        </div>
                     </form>
 
-                    <div className={cls(styles.col__3, styles.registerUser__button)}>
-                        <Button title='Ghi danh' bgColor='#41b294' />
-                    </div>
                 </div>
             </div>
 
