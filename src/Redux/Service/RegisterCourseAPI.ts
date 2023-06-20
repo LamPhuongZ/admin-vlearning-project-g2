@@ -18,7 +18,7 @@ export type CourseRegisterPayload = {
 export const getCourseListNotRegisterAPI = async (accountId: string) => {
     try {
         const response = await axiosClient.post(`QuanLyNguoiDung/LayDanhSachKhoaHocChuaGhiDanh?TaiKhoan=${accountId}`);
-        return response;
+        return response.data;
     } catch (error) {
         throw error;
     }

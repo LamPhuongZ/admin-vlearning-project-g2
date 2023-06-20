@@ -8,11 +8,11 @@ import { ColumnsType } from 'antd/es/table';
 import { getCourseListAPI } from '../../../Redux/Service/courseListAPI';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
-import { courseRegisterAPI, CourseRegisterPayload, DeleteCoursePayload, courseListApprovalAPI, courseListWaitingApprovalAPI, deleteCourseRegisterAPI } from '../../../Redux/Service/RegisterCourseAPI';
+import { courseRegisterAPI, CourseRegisterPayload, DeleteCoursePayload, courseListApprovalAPI, courseListWaitingApprovalAPI, deleteCourseRegisterAPI, getCourseListNotRegisterAPI } from '../../../Redux/Service/RegisterCourseAPI';
 import Search from '../../../Core/Search';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../Redux/store';
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 interface CourseType {
     maKhoaHoc: string;
@@ -157,9 +157,9 @@ function RegisterUser({ }: Props) {
     }, [userId]);
 
     // Lấy danh sách khóa học
-    const getCourseList = async () => {
+    const getCourseList = async (userId: string) => {
         try {
-            const reponse = await getCourseListAPI();
+            const reponse = await getCourseListNotRegisterAPI(userId);
             setCourseList(reponse);
         } catch (error) {
             toast.error("Không lấy được danh sách khóa học");
@@ -167,8 +167,10 @@ function RegisterUser({ }: Props) {
     };
 
     useEffect(() => {
-        getCourseList();
-    }, []);
+        if (userId) {
+            getCourseList(userId);
+        }
+    }, [userId]);
 
     // Hiển thị danh sách tài khoản để chọn
     const renderCourseList = () => {
@@ -231,13 +233,11 @@ function RegisterUser({ }: Props) {
         }
     };
 
-    const {
-        handleSubmit,
-    } = useForm({
+    const { handleSubmit, control } = useForm({
         defaultValues: {
-            taiKhoan: "",
             maKhoaHoc: "",
-        },
+            taiKhoan: userId || "",
+        }
     });
 
     return (
@@ -246,23 +246,35 @@ function RegisterUser({ }: Props) {
                 <div className={styles.row}>
                     <h3 className={styles.col__3}>Chọn khóa học</h3>
 
-                    <form className={styles.col__6} >
+                    <form className={cls(styles.col__9)} onSubmit={handleSubmit(handleCourseRegister)}>
                         <div className={styles.formStyle}>
-                            <Select
-                                style={{ width: "100%" }}
-                                showSearch
-                                optionFilterProp="children"
-                                placeholder="Chọn người dùng"
-                            >
-                                {renderCourseList()}
-                            </Select>
+                            <Controller
+                                name="maKhoaHoc"
+                                control={control}
+                                render={({ field }) => {
+                                    return (
+                                        <Select
+                                            {...field}
+                                            style={{ width: "100%" }}
+                                            value={undefined}
+                                            showSearch
+                                            optionFilterProp="children"
+                                            placeholder="Chọn khóa học"
+                                        >
+                                            {renderCourseList()}
+                                        </Select>
+                                    )
+                                }}
+                            />
                         </div>
 
-                        <div className={cls(styles.formStyle)}>
-                            <Button title='Ghi danh' bgColor='#41b294' />
+                        <div className={cls(styles.registerCourse__button)}>
+                            <Button
+                                title='Ghi danh'
+                                bgColor='#41b294'
+                            />
                         </div>
                     </form>
-
                 </div>
             </div>
 
