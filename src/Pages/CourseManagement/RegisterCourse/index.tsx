@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import Search from '../../../Core/Search';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../Redux/store';
+import { Controller, useForm } from "react-hook-form";
 
 interface UserType {
     taiKhoan: string;
@@ -54,30 +55,32 @@ function RegisterCourse({ }: Props) {
             title: 'Chờ Xác Nhận',
             key: 'choXacNhan',
             render: (_, record) => (
-                <Space>
-                    <CheckCircleOutlined
-                        style={{ color: "green", fontSize: "20px" }}
-                        onClick={() => {
-                            if (courseId) {
-                                handleCourseRegister({ maKhoaHoc: courseId, taiKhoan: record.taiKhoan })
-                            }
-                        }}
-                    />
-
-                    <Popconfirm
-                        title='Bạn có chắc muốn xóa học viên này không ?'
-                        onConfirm={() => {
-                            if (user && courseId) {
-                                onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: user.taiKhoan })
-                            }
-                        }}
-                    >
-                        <DeleteOutlined
-                            style={{ color: "red", fontSize: "20px" }}
-
+                dataUserWaitingApproval.length >= 1 ? (
+                    <Space>
+                        <CheckCircleOutlined
+                            style={{ color: "green", fontSize: "20px" }}
+                            onClick={() => {
+                                if (courseId) {
+                                    handleCourseRegister({ maKhoaHoc: courseId, taiKhoan: record.taiKhoan })
+                                }
+                            }}
                         />
-                    </Popconfirm>
-                </Space >
+
+                        <Popconfirm
+                            title='Bạn có chắc muốn xóa học viên này không ?'
+                            onConfirm={() => {
+                                if (user && courseId) {
+                                    onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: user.taiKhoan })
+                                }
+                            }}
+                        >
+                            <DeleteOutlined
+                                style={{ color: "red", fontSize: "20px" }}
+
+                            />
+                        </Popconfirm>
+                    </Space >
+                ) : null
             ),
         },
     ];
@@ -101,21 +104,23 @@ function RegisterCourse({ }: Props) {
             title: 'Chờ Xác Nhận',
             key: 'choXacNhan',
             render: (_, record) => (
-                <Space>
-                    <Popconfirm
-                        title='Bạn có chắc muốn xóa học viên này không ?'
-                        onConfirm={() => {
-                            if (user && courseId) {
-                                onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: user.taiKhoan })
-                            }
-                        }}
-                    >
-                        <DeleteOutlined
-                            style={{ color: "red", fontSize: "20px" }}
+                dataUserOfCourse.length >= 1 ? (
+                    <Space>
+                        <Popconfirm
+                            title='Bạn có chắc muốn xóa học viên này không ?'
+                            onConfirm={() => {
+                                if (user && courseId) {
+                                    onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: user.taiKhoan })
+                                }
+                            }}
+                        >
+                            <DeleteOutlined
+                                style={{ color: "red", fontSize: "20px" }}
 
-                        />
-                    </Popconfirm>
-                </Space>
+                            />
+                        </Popconfirm>
+                    </Space>
+                ) : null
             ),
         },
     ];
@@ -184,7 +189,7 @@ function RegisterCourse({ }: Props) {
         })
     };
 
-    // Call học viên chờ xác thực
+    // Call học viên chờ xác thực ghi danh
     const handleCourseRegister = async (values: CourseOfUserRegisterPayload) => {
         try {
             await courseOfUserRegisterAPI(values);
@@ -209,7 +214,6 @@ function RegisterCourse({ }: Props) {
 
         }
     };
-
 
     // Hàm tìm kiếm học viên đã tham gia khóa học
     const handleSearchUserListOfCourse = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -237,31 +241,50 @@ function RegisterCourse({ }: Props) {
         setFIlterDataWaitingApproval(event.target.value);
     };
 
+    const { handleSubmit, control } = useForm({
+        defaultValues: {
+            maKhoaHoc: courseId || "",
+            taiKhoan: "",
+        },
+    });
+
     return (
         <div className={styles.registerCourse}>
             <div className={cls(styles.registerCourse__top, styles.border__bottom)}>
                 <div className={styles.row}>
                     <h3 className={styles.col__3}>Chọn người dùng</h3>
 
-                    <form className={styles.col__6}>
+                    <form className={cls(styles.col__9)} onSubmit={handleSubmit(handleCourseRegister)}>
                         <div className={styles.formStyle}>
-                            <Select
-                                style={{ width: "100%" }}
-                                showSearch
-                                optionFilterProp="children"
-                                placeholder="Chọn người dùng"
-                            >
-                                {renderUserList()}
-                            </Select>
+                            <Controller
+                                name="taiKhoan"
+                                control={control}
+                                render={({ field }) => {
+                                    return (
+                                        <Select
+                                            {...field}
+                                            style={{ width: "100%" }}
+                                            value={undefined}
+                                            showSearch
+                                            optionFilterProp="children"
+                                            placeholder="Chọn người dùng"
+                                        >
+                                            {renderUserList()}
+                                        </Select>
+                                    )
+                                }}
+                            />
+                        </div>
+
+                        <div className={cls(styles.registerCourse__button)}>
+                            <Button
+                                title='Ghi danh'
+                                bgColor='#41b294'
+                            />
                         </div>
                     </form>
 
-                    <div className={cls(styles.col__3, styles.registerCourse__button)}>
-                        <Button
-                            title='Ghi danh'
-                            bgColor='#41b294'
-                        />
-                    </div>
+
                 </div>
             </div>
 

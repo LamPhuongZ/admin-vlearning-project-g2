@@ -18,7 +18,6 @@
 
     .row {
         display: flex;
-        flex-wrap: wrap;
 
         .col__6 {
             width: 50%;
@@ -26,7 +25,6 @@
             .formStyle {
 
                 input {
-                    padding: 8px;
                     width: 100%;
                 }
             }
@@ -34,6 +32,10 @@
 
         .col__3 {
             width: 25% !important;
+        }
+
+        .col__9 {
+            width: 75% !important;
         }
 
         .registerCourse__button {
