@@ -69,8 +69,8 @@ function RegisterCourse({ }: Props) {
                         <Popconfirm
                             title='Bạn có chắc muốn xóa học viên này không ?'
                             onConfirm={() => {
-                                if (user && courseId) {
-                                    onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: user.taiKhoan })
+                                if (courseId) {
+                                    onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: record.taiKhoan })
                                 }
                             }}
                         >
@@ -109,8 +109,8 @@ function RegisterCourse({ }: Props) {
                         <Popconfirm
                             title='Bạn có chắc muốn xóa học viên này không ?'
                             onConfirm={() => {
-                                if (user && courseId) {
-                                    onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: user.taiKhoan })
+                                if (courseId) {
+                                    onDeleteUserListOfCourse({ maKhoaHoc: courseId, taiKhoan: record.taiKhoan })
                                 }
                             }}
                         >
@@ -209,8 +209,7 @@ function RegisterCourse({ }: Props) {
             getUserListOfCourse(courseId || "");
             toast.success("Hủy ghi danh thành công");
         } catch (error: any) {
-            // toast.error(error.content.messager);
-            console.log(error);
+            toast.error(error.content.messager);
 
         }
     };
