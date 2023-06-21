@@ -98,7 +98,7 @@ function RegisterUser({ }: Props) {
             dataIndex: 'tenKhoaHoc',
         },
         {
-            title: 'Chờ Xác Nhận',
+            title: 'Hành động',
             key: 'choXacNhan',
             render: (_, record) => (
                 <Space>
@@ -271,7 +271,10 @@ function RegisterUser({ }: Props) {
                         <div className={cls(styles.registerCourse__button)}>
                             <Button
                                 title='Ghi danh'
-                                bgColor='#41b294'
+                                margin='10px 0 0 0'
+                                color='rgb(65, 178, 148)'
+                                bgColor='transparent'
+                                borderColor='rgb(65, 178, 148)'
                             />
                         </div>
                     </form>
