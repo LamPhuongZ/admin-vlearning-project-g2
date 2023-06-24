@@ -172,6 +172,7 @@ function UserManagement({ }: Props) {
                 columns={columns}
                 dataSource={accounts}
                 rowKey={(row) => row.taiKhoan}
+                scroll={{ x: 400 }}
             />
         </div>
     );
