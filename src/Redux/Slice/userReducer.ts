@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import { LoginPayload, loginRequest } from "../Service/loginAPI";
 
 type User = {
@@ -29,6 +30,9 @@ export const loginAction = createAsyncThunk(
       localStorage.setItem("accessToken", response.accessToken);
       return response;
     } catch (error) {
+      toast.error(
+        "Tài khoản hoặc mật khẩu không hợp lệ. Vui lòng kiểm tra lại hoặc đăng ký mới"
+      );
       return thunkApi.rejectWithValue(error);
     }
   }

@@ -11,7 +11,7 @@ export const loginRequest = async (payload: LoginPayload) => {
       payload
     );
     return response.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error.response.data;
   }
 };

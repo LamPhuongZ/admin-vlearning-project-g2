@@ -91,6 +91,7 @@ function CourseManagement({ }: Props) {
             render: (_, record) => {
                 return (
                     <img
+                        style={{ objectFit: "contain" }}
                         src={record.hinhAnh}
                         alt={record.maKhoaHoc}
                         width="100"
