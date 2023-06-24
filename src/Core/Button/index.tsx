@@ -1,4 +1,3 @@
-import { StringifyOptions } from "querystring";
 import React, { ReactNode } from "react";
 import styles from "./button.module.scss";
 

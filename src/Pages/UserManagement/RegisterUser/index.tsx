@@ -5,7 +5,6 @@ import styles from './registerUser.module.scss'
 import cls from 'classnames'
 import Button from '../../../Core/Button';
 import { ColumnsType } from 'antd/es/table';
-import { getCourseListAPI } from '../../../Redux/Service/courseListAPI';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { courseRegisterAPI, CourseRegisterPayload, DeleteCoursePayload, courseListApprovalAPI, courseListWaitingApprovalAPI, deleteCourseRegisterAPI, getCourseListNotRegisterAPI } from '../../../Redux/Service/RegisterCourseAPI';
