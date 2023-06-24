@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../../Core/Button";
 import useCustomDispatch from "../../Hooks/useCustomDispatch";
 import useCustomSelector from "../../Hooks/useCustomSelector";
-import userReducer, { logout } from "../../Redux/Slice/userReducer";
+import { logout } from "../../Redux/Slice/userReducer";
 import styles from "./header.module.scss";
 
 type Props = {};
