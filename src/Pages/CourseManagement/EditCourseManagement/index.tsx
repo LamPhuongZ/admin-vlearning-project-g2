@@ -46,7 +46,7 @@ function EditCourseManagement({ }: Props) {
       moTa: "",
       luotXem: 0,
       hinhAnh: "",
-      maNhom: "GP02",
+      maNhom: "GP01",
       ngayTao: "",
       soLuongHocVien: 0,
       taiKhoanNguoiTao: "",
@@ -66,7 +66,7 @@ function EditCourseManagement({ }: Props) {
       setValue("moTa", response.moTa);
       setValue("luotXem", response.luotXem);
       setValue("hinhAnh", response.hinhAnh);
-      setValue("maNhom", "GP02");
+      setValue("maNhom", "GP01");
       setValue("ngayTao", response.ngayTao);
       setValue("soLuongHocVien", response.soLuongHocVien);
       setValue("taiKhoanNguoiTao", response.nguoiTao.taiKhoan);
@@ -97,7 +97,7 @@ function EditCourseManagement({ }: Props) {
           fileList.length && fileList[0]?.originFileObj
             ? fileList[0]?.originFileObj
             : fileList[0].url,
-        maNhom: "GP02",
+        maNhom: "GP01",
         ngayTao: values.ngayTao,
         soLuongHocVien: values.soLuongHocVien,
         taiKhoanNguoiTao: values.taiKhoanNguoiTao,
@@ -227,7 +227,7 @@ function EditCourseManagement({ }: Props) {
                   placeholder="--Chọn Nhóm--"
 
                   options={[
-                    { value: 'GP02', label: 'GP02' },
+                    { value: 'GP01', label: 'GP01' },
                   ]}
                 />
               )

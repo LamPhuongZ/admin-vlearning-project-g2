@@ -185,7 +185,7 @@ function CreateCourseManagement({ }: Props) {
                   placeholder="--Chọn Nhóm--"
 
                   options={[
-                    { value: 'GP02', label: 'GP02' },
+                    { value: 'GP01', label: 'GP01' },
                   ]}
                 />
               )

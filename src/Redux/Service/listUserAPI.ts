@@ -14,7 +14,7 @@ export type UpdateUserInfoPayload = {
 export const listUserRequest = async () => {
   try {
     const response = await axiosClient(
-      `/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=${"GP02"}`
+      `/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=${"GP01"}`
     );
     return response.data;
   } catch (error: any) {
@@ -38,7 +38,7 @@ export const deleteUserRequest = async (userId: string) => {
 export const searchUserRequest = async (userName: string) => {
   try {
     const response = await axiosClient.get(
-      `/QuanLyNguoiDung/TimKiemNguoiDung?MaNhom=${"GP02"}&tuKhoa=${userName}`
+      `/QuanLyNguoiDung/TimKiemNguoiDung?MaNhom=${"GP01"}&tuKhoa=${userName}`
     );
     return response.data;
   } catch (error: any) {

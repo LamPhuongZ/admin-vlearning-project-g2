@@ -43,7 +43,7 @@ function EditUserManagement({ }: Props) {
             hoTen: "",
             soDT: "",
             maLoaiNguoiDung: "",
-            maNhom: "GP02",
+            maNhom: "GP01",
             email: "",
         },
         mode: "onTouched",
@@ -63,7 +63,7 @@ function EditUserManagement({ }: Props) {
                 setValue("hoTen", item.hoTen);
                 setValue("soDT", item.soDt);
                 setValue("maLoaiNguoiDung", item.maLoaiNguoiDung);
-                setValue("maNhom", "GP02");
+                setValue("maNhom", "GP01");
                 setValue("email", item.email);
             }
         } catch (error: any) {
@@ -78,7 +78,7 @@ function EditUserManagement({ }: Props) {
                 hoTen: values.hoTen,
                 soDT: values.soDT,
                 maLoaiNguoiDung: values.maLoaiNguoiDung,
-                maNhom: "GP02",
+                maNhom: "GP01",
                 email: values.email,
             });
             toast.success("Cập nhật thông tin thành công");
@@ -126,7 +126,7 @@ function EditUserManagement({ }: Props) {
             </div>
             <div className={styles.formStyle}>
                 <select {...register("maNhom")}>
-                    <option value="GP02">GP02</option>
+                    <option value="GP01">GP01</option>
                 </select>
             </div>
             <div className={styles.formStyle}>
